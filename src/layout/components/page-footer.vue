@@ -1,0 +1,43 @@
+<!-- 全局页脚 -->
+<template>
+  <ele-text type="placeholder" class="ele-footer">
+    <el-space :size="24">
+      <el-link
+        underline="never"
+        href="https://www.bjzxzy.com.cn/"
+        target="_blank"
+      >
+        {{ t('layout.footer.website') }}
+      </el-link>
+      <el-link
+        underline="never"
+        href="https://zxzy-admin.frp.520gcp.com/#/simple/ele-pro-form"
+        target="_blank"
+      >
+        {{ t('layout.footer.document') }}
+      </el-link>
+    </el-space>
+    <div style="margin-top: 8px">
+      {{ t('layout.footer.copyright') }}
+    </div>
+  </ele-text>
+</template>
+
+<script setup>
+  import { useI18n } from 'vue-i18n';
+
+  const { t } = useI18n();
+</script>
+
+<style lang="scss" scoped>
+  @use 'element-plus/theme-chalk/src/mixins/function.scss' as *;
+
+  .ele-footer {
+    padding: 16px 0;
+    text-align: center;
+    #{getCssVarName('text-color', 'regular')}: getCssVar(
+      'text-color',
+      'placeholder'
+    );
+  }
+</style>

@@ -1,0 +1,51 @@
+{
+  "id": "4869468",
+  "name": "中兴",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "6318174",
+      "name": "上",
+      "font_class": "shang",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "6318182",
+      "name": "下",
+      "font_class": "xia",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "1103492",
+      "name": "descending (1)",
+      "font_class": "descending1",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "1103485",
+      "name": "ascending (1)",
+      "font_class": "ascending1",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "15838455",
+      "name": "direction-down",
+      "font_class": "direction-down",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "15838461",
+      "name": "direction-up",
+      "font_class": "direction-up",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    }
+  ]
+}

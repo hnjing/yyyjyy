@@ -1,0 +1,496 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>益阳紧急救援中心 - 人员信息</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+      body {
+          font-family: 'Noto Sans SC', sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <div class="max-w-md mx-auto bg-white min-h-screen shadow-sm">
+      <!-- 顶部标题栏 -->
+      <header class="bg-blue-600 text-white p-4 text-center">
+        <h1 class="text-xl font-bold flex items-center justify-center">
+          益阳紧急救援中心
+        </h1>
+      </header>
+      <!-- 人员信息卡片 -->
+      <main class="p-4 mb-6">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+          <!-- 头像和基本信息 -->
+          <div class="flex items-center p-4 border-b">
+            <div class="relative">
+              <img
+                alt="头像"
+                id="avatar"
+                class="w-20 h-20 rounded-full object-cover border-2 border-blue-500"
+                src="https://design.gemcoder.com/staticResource/echoAiSystemImages/c1a60c5f6e7e18cc77177bc341302d61.png"
+              />
+              <span
+                class="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+              >
+                <i class="fas fa-check text-xs"> </i>
+              </span>
+            </div>
+            <div class="ml-4">
+              <h2 class="text-lg font-bold" id="name">张三</h2>
+              <div class="flex items-center text-gray-600 mt-1">
+                <i class="fas fa-venus-mars mr-1 text-blue-500"> </i>
+                <span class="mr-3" id="sex"> 男 </span>
+                <i class="fas fa-birthday-cake mr-1 text-blue-500"> </i>
+                <span id="age"> 32岁 </span>
+                <i class="fas fa-tint ml-3 mr-1 text-blue-500"> </i>
+                <span id="bloodType"> O型血 </span>
+              </div>
+              <div class="text-sm text-gray-500 mt-1">
+                <i class="fas fa-id-card mr-1 text-blue-500"> </i>
+                <span id="rescueNumber"> RESC-2023-001 </span>
+              </div>
+              <div class="text-sm text-gray-500 mt-1">
+                <i class="fas fa-building mr-1 text-blue-500"> </i>
+                <span id="department"> 所属部门: 应急救援一队 </span>
+              </div>
+            </div>
+          </div>
+          <!-- 详细信息 -->
+          <div class="p-4">
+            <div class="mb-4">
+              <h3
+                class="text-md font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <i class="fas fa-phone-alt mr-2 text-blue-500"> </i>
+                联系方式
+              </h3>
+              <div class="pl-6">
+                <p class="text-gray-600 mb-1">手机: <a id="phone" href="tel:13873331234">13873331234</a></p>
+                <p class="text-gray-600">紧急联系人: 
+                  <span id="emergencyContact">李四</span> 
+                  (<span id="emergencyContactRelation">父亲</span>)
+                </p>
+              </div>
+            </div>
+            <div class="mb-4" id="carInfo">
+              <h3
+                class="text-md font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <i class="fas fa-car mr-2 text-blue-500"> </i>
+                车辆信息
+              </h3>
+              <div id="carInfoList">
+                <div class="pt-3 pl-6 pb-6 border-b">
+                  <p class="text-gray-600 mb-1">车牌号: 湘H·A1234</p>
+                  <p class="text-gray-600">车辆类型: 应急救援车</p>
+                  <img
+                    alt="救援车辆"
+                    class="w-full h-32 object-cover rounded mt-2"
+                    src="https://design.gemcoder.com/staticResource/echoAiSystemImages/5a66353fe7591143da66740e8f188b57.png"
+                  />
+                </div>
+                <div class="pt-3 pl-6 pb-6 border-b">
+                  <p class="text-gray-600 mb-1">车牌号: 湘H·A1234</p>
+                  <p class="text-gray-600">车辆类型: 应急救援车</p>
+                  <img
+                    alt="救援车辆"
+                    class="w-full h-32 object-cover rounded mt-2"
+                    src="https://design.gemcoder.com/staticResource/echoAiSystemImages/5a66353fe7591143da66740e8f188b57.png"
+                  />
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3
+                class="text-md font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <i class="fas fa-award mr-2 text-blue-500"> </i>
+                荣誉证书
+              </h3>
+              <div class="flex flex-col gap-2 pl-6" id="honorCertificate">
+                <img
+                  alt="荣誉证书1"
+                  class="w-full h-32 object-cover rounded"
+                  src="https://design.gemcoder.com/staticResource/echoAiSystemImages/3edf9b31c98ab47fa1b8494520581111.png"
+                />
+                <img
+                  alt="荣誉证书2"
+                  class="w-full h-32 object-cover rounded"
+                  src="https://design.gemcoder.com/staticResource/echoAiSystemImages/ea22363ec87a5e639ede2d409cb88a53.png"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 救援经历 -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+          <div class="p-4 border-b">
+            <h3 class="text-md font-semibold text-gray-700 flex items-center">
+              <i class="fas fa-fire-extinguisher mr-2 text-blue-500"> </i>
+              救援经历
+            </h3>
+          </div>
+          <div class="p-4">
+            <div id="experience">
+              <div class="mb-3 experience-item">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-medium"> 2023年抗洪抢险 </span>
+                  <span class="text-sm text-gray-500"> 2023-07-15 </span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  在益阳市资阳区参与抗洪抢险工作，成功转移群众50余人
+                </p>
+              </div>
+              <div class="mb-3 experience-item">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-medium"> 2022年山林火灾 </span>
+                  <span class="text-sm text-gray-500"> 2022-11-03 </span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  参与桃江县山林火灾扑救工作，连续奋战36小时
+                </p>
+              </div>
+              <div class="mb-3 experience-item">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-medium"> 2021年地震救援 </span>
+                  <span class="text-sm text-gray-500"> 2021-05-10 </span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  参与四川某地地震救援，协助搭建临时安置点
+                </p>
+              </div>
+              <div class="mb-3 experience-item hidden">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-medium"> 2020年交通事故救援 </span>
+                  <span class="text-sm text-gray-500"> 2020-09-20 </span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  参与G55高速交通事故救援，协助伤员转运
+                </p>
+              </div>
+              <div class="mb-3 experience-item hidden">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-medium"> 2019年水上救援演练 </span>
+                  <span class="text-sm text-gray-500"> 2019-08-01 </span>
+                </div>
+                <p class="text-sm text-gray-600">
+                  参加洞庭湖水上救援演练，提升水域救援技能
+                </p>
+              </div>
+            </div>
+            <button
+              class="w-full bg-blue-500 text-white py-2 rounded-md mt-5"
+              id="show-more-experiences"
+            >
+              展示更多
+            </button>
+          </div>
+        </div>
+      </main>
+      <!-- 底部操作栏 -->
+      <footer
+        class="fixed bottom-0 left-0 right-0 bg-white border-t p-3 max-w-md mx-auto"
+      >
+        <div class="flex justify-around">
+          <button
+            id="emergencyContactPhone"
+            class="bg-blue-600 text-white px-6 py-2 rounded-full flex items-center"
+          >
+            <i class="fas fa-phone-alt mr-2"> </i>
+            紧急联系人
+          </button>
+          <button
+            class="bg-green-600 text-white px-6 py-2 rounded-full flex items-center"
+            id="center-phone-btn"
+          >
+            <i class="fas fa-phone-alt mr-2"> </i>
+            中心电话
+          </button>
+        </div>
+      </footer>
+    </div>
+    <script>
+
+      function init() {
+        const data = {
+          id: 1,
+          avatar: 'https://design.gemcoder.com/staticResource/echoAiSystemImages/c1a60c5f6e7e18cc77177bc341302d61.png',
+          name: '王平',
+          sex: '男',
+          age: 32,
+          bloodTypeName: 'O型血',
+          phone: '13812341234',
+          rescueNumber: 'RESC-2023-001',
+          department: '应急救援一队',
+          emergencyContact: '李四',
+          emergencyContactPhone: '13911115678',
+          emergencyContactRelation: '父亲',
+          carInfo: [{
+            carNo: '湘H·A1234',
+            aidCarNo: '湘H·A1234',
+            carImage: 'https://design.gemcoder.com/staticResource/echoAiSystemImages/5a66353fe7591143da66740e8f188b57.png'
+          }],
+          honorCertificate: [
+            'https://design.gemcoder.com/staticResource/echoAiSystemImages/3edf9b31c98ab47fa1b8494520581111.png',
+            'https://design.gemcoder.com/staticResource/echoAiSystemImages/ea22363ec87a5e639ede2d409cb88a53.png'
+          ],
+          experience: [
+            {
+              title: '2023年抗洪抢险',
+              date: '2023-07-15',
+              description: '在益阳市资阳区参与抗洪抢险工作，成功转移群众50余人'
+            }, 
+            {
+              title: '2022年山林火灾',
+              date: '2022-11-03',
+              description: '参与桃江县山林火灾扑救工作，连续奋战36小时'
+            },
+            {
+              title: '2021年地震救援',
+              date: '2021-05-10',
+              description: '参与四川某地地震救援，协助搭建临时安置点'
+            },
+            {
+              title: '2020年交通事故救援',
+              date: '2020-09-20',
+              description: '参与G55高速交通事故救援，协助伤员转运'
+            }
+          ]
+        }
+        // 需要设置的元素
+        const setContentList = ['avatar', 'name', 'sexAgeBlood', 'profileId', 'profileDept', 'phone', 'contactEmergency', 'carInfoList', 'honorCertificate', 'experienceList']
+        setContentList.forEach(item => {
+          const element = document.querySelector(`#${item}`);
+          if (element) {
+            element.textContent = data[item];
+          }
+        });
+
+        // 设置车辆信息
+        const carInfo = document.querySelector('#carInfoList');
+        carInfo.innerHTML = '';
+        const carInfoListItems = data.carInfo.map(item => {
+          const div = document.createElement('div');
+          div.className = 'pt-3 pl-6 pb-6 border-b';
+          div.innerHTML = `
+            <p class="text-gray-600 mb-1">车牌号: ${item.carNo}</p>
+            <p class="text-gray-600 mb-1">救援车牌号: ${item.aidCarNo}</p>
+            <img
+              alt="救援车辆"
+              class="w-full h-32 object-cover rounded mt-2"
+              src="${item.carImage}"
+            />
+          `;
+          return div;
+        });
+        carInfo.append(...carInfoListItems);
+        
+        // 荣誉证书
+        const honorCertificate = document.querySelector('#honorCertificate');
+        honorCertificate.innerHTML = '';
+        data.honorCertificate.forEach(url => {
+          const img = document.createElement('img');
+          img.src = url;
+          img.className = 'w-full h-32 object-cover rounded';
+          honorCertificate.appendChild(img);
+        });
+        
+        // 救援经历
+        const expList = document.getElementById('experience');
+        expList.innerHTML = '';
+        data.experience.forEach((exp, idx) => {
+          const div = document.createElement('div');
+          div.className = 'mb-3 experience-item' + (idx >= 3 ? ' hidden' : '');
+          div.innerHTML = `
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-medium">${exp.title}</span>
+              <span class="text-sm text-gray-500">${exp.date}</span>
+            </div>
+            <p class="text-sm text-gray-600">${exp.description}</p>
+          `;
+          expList.appendChild(div);
+        });
+
+        // 展示更多按钮
+        const showMoreBtn = document.getElementById('show-more-experiences');
+        if (data.experience.length > 3) {
+          showMoreBtn.style.display = '';
+          showMoreBtn.onclick = function () {
+            expList.querySelectorAll('.experience-item').forEach(item => item.classList.remove('hidden'));
+            showMoreBtn.style.display = 'none';
+          };
+        } else {
+          showMoreBtn.style.display = 'none';
+        }
+        
+        // 按钮事件
+        document.querySelector('button.bg-blue-600').onclick = function (e) {
+          window.location.href = `tel:${data.emergencyContactPhone}`;
+        };
+        document.getElementById('center-phone-btn').onclick = function () {
+          window.location.href = `tel:18573169949`;
+        };
+      }
+
+      // 页面加载后初始化
+      window.addEventListener('DOMContentLoaded', init);
+
+  
+      // 定义要劫持的属性
+      var ytCustomProperties = ['textContent', 'innerText'];
+      ytCustomProperties.forEach(function (prop) {
+        var descriptor = Object.getOwnPropertyDescriptor(Element.prototype, prop) || Object.getOwnPropertyDescriptor(Node.prototype, prop);
+        if (descriptor && descriptor.set) {
+          var originalSet = descriptor.set;
+          Object.defineProperty(Element.prototype, prop, {
+            set: function set(value) {
+              // 优先取 data-yteditvalue，否则用传入的 value
+              var finalValue = this.dataset.yteditvalue ?? value;
+              originalSet.call(this, finalValue);
+            },
+            configurable: true
+          });
+        }
+      });
+      // 保存原生方法
+      var nativeElementQuerySelector = Element.prototype.querySelector;
+      var nativeDocumentQuerySelector = Document.prototype.querySelector;
+      function ytCustomQuerySelector(selector) {
+        // 第二步：尝试用选择器获取DOM元素
+        // 执行原生选择器查询
+        var foundElement = this === document ? nativeDocumentQuerySelector.call(this, selector) : nativeElementQuerySelector.call(this, selector);
+        if (foundElement) {
+          // 设置属性
+          if (!foundElement.hasAttribute('data-selectorname')) {
+            foundElement.setAttribute('data-selectorname', selector);
+          }
+          // 第三步：直接返回找到的元素
+          return foundElement;
+        }
+
+        // 如果通过选择器没找到，尝试通过data-selectorName属性查找
+        var allElements = document.querySelectorAll('[data-selectorname]');
+        for (var i = 0; i < allElements.length; i++) {
+          if (allElements[i].getAttribute('data-selectorname') === selector) {
+            return allElements[i];
+          }
+        }
+
+        // 如果都没找到，返回null
+        return null;
+      }
+
+      // 如果需要也重写querySelectorAll，可以类似实现
+      // 重写原生的querySelector
+      Document.prototype.querySelector = ytCustomQuerySelector;
+      Element.prototype.querySelector = ytCustomQuerySelector;
+      var nativeElementInsertBefore = Element.prototype.insertBefore;
+      function ytCustomInsertBefore(newNode, referenceNode) {
+        // 当前元素作为默认父元素
+        var defaultParentNode = this;
+
+        // 检查参考节点是否存在
+        if (!referenceNode) {
+          // 如果没有提供参考节点，直接添加到末尾
+          return nativeElementInsertBefore.call(defaultParentNode, newNode, null);
+        }
+
+        // 检查参考节点是否仍然是父节点的直接子节点
+        if (referenceNode.parentNode === defaultParentNode) {
+          // 正常情况：参考节点仍在父节点下，直接插入
+          return nativeElementInsertBefore.call(defaultParentNode, newNode, referenceNode);
+        }
+
+        // 检查参考节点是否有 data-ytparentvalue 属性（被移动出去的节点）
+        var referenceParentValue = referenceNode.getAttribute('data-ytparentvalue');
+        if (referenceParentValue) {
+          // 查找具有匹配 data-ytextravalue 的父元素
+          var actualParentNode = document.querySelector('[data-ytextravalue="' + referenceParentValue + '"]');
+          if (actualParentNode) {
+            // 获取参考节点原来的索引位置
+            var originalIndex = referenceNode.getAttribute('data-ytoriginindex');
+            if (originalIndex !== null && !isNaN(originalIndex)) {
+              // 获取实际父节点当前的所有子节点
+              var children = Array.from(actualParentNode.children);
+
+              // 查找应该插入的位置
+              for (var i = 0; i < children.length; i++) {
+                var child = children[i];
+                var childOriginalIndex = child.getAttribute('data-ytoriginindex');
+
+                // 如果子节点有原始索引，并且比参考节点的原始索引大
+                if (childOriginalIndex !== null && !isNaN(childOriginalIndex)) {
+                  if (parseInt(childOriginalIndex) > parseInt(originalIndex)) {
+                    // 找到第一个索引更大的节点，插入到它前面
+                    return nativeElementInsertBefore.call(actualParentNode, newNode, child);
+                  }
+                }
+              }
+
+              // 如果没有找到更大的索引，插入到最后
+              return nativeElementInsertBefore.call(actualParentNode, newNode, null);
+            }
+
+            // 没有原始索引信息，插入到实际父元素的最后
+            return nativeElementInsertBefore.call(actualParentNode, newNode, null);
+          }
+        }
+
+        // 默认情况：插入到当前父元素的最后
+        return nativeElementInsertBefore.call(defaultParentNode, newNode, null);
+      }
+
+      // 重写原生 insertBefore 方法
+      Element.prototype.insertBefore = ytCustomInsertBefore;
+
+      // 需要给新添加的a标签跳转链接加入一些必要的样式 保证加入后不影响原来的布局
+      function addUniqueStyle(cssText) {
+        var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'custom-style';
+        var targetDom = document.getElementById(id);
+        if (targetDom && targetDom.tagName === 'STYLE') return; // 已存在则跳过
+
+        var style = document.createElement('style');
+        style.id = id;
+        style.innerHTML = cssText;
+        document.head.appendChild(style);
+      }
+      addUniqueStyle('.yt-a-defalut-link[custom-a="true"] > * { margin:0;flex:1; }');
+
+      // // 紧急联系按钮点击事件
+      // document.querySelector('button.bg-blue-600').addEventListener('click', function () {
+      //   alert('正在拨打紧急联系人电话: 138****1234');
+      // });
+
+      // // 中心电话按钮点击事件
+      // document.getElementById('center-phone-btn').addEventListener('click', function () {
+      //   alert('正在拨打益阳紧急救援中心电话: 07374631999');
+      // });
+
+      // 救援经历展示更多按钮点击事件
+      document.addEventListener('DOMContentLoaded', function () {
+        var experienceItems = document.querySelectorAll('.experience-item');
+        var showMoreBtn = document.getElementById('show-more-experiences');
+        var initialDisplayCount = 3;
+
+        // 初始显示前三条，隐藏其余
+        experienceItems.forEach(function (item, index) {
+          if (index >= initialDisplayCount) {
+            item.classList.add('hidden');
+          }
+        });
+        showMoreBtn.addEventListener('click', function () {
+          experienceItems.forEach(function (item) {
+            item.classList.remove('hidden');
+          });
+          this.classList.add('hidden'); // 隐藏“展示更多”按钮
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+:deep(.el-input__inner:-webkit-autofill) {
+  background-color: #ffffff !important;
+  /*在这里换成你想要的颜色*/
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.specialInput {
+  --ele-input-focus-shadow: 0 0 0 1px #5280fb;
+  --ele-input-focus-border: 1px solid #5280fb;
+  --ele-input-hover-border: 1px solid #5280fb;
+  --ele-input-hover-shadow: 0 0 0 1px #5280fb;
+}
+
+.form_line {
+  width: 1px;
+  height: 14px;
+  background: #4f5e84;
+  border-left: 12px solid #ffffff;
+  border-right: 6px solid #ffffff;
+}
+
+.el-popper.is-customized {
+  /* Set padding to ensure the height is 32px */
+  padding: 6px 12px;
+  background: #507aff !important;
+  --el-tooltip-bg: #507aff !important;
+  color: #fff !important;
+  border: 1px solid #507aff !important;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.el-popper.is-customized .el-popper__arrow::before {
+  background: #507aff !important;
+  border-color: #507aff !important;
+  right: 0;
+}
+
+.custom-tooltip {
+  /* 向上移动 20px，可按需调整 */
+  top: -30px !important;
+}
