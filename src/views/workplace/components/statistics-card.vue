@@ -14,7 +14,7 @@
         <ele-text type="placeholder" class="monitor-count-text">
           总人数
         </ele-text>
-        <ele-avatar-group :data="visitUsers" size="small" :max-count="4" />
+        <ele-avatar-group :data="myVisitUsers" size="small" :max-count="4" />
       </ele-card>
     </el-col>
     <el-col :md="6" :sm="12" :xs="24">
@@ -112,7 +112,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import type { AvatarItem } from 'ele-admin-plus/es/ele-avatar-group/types';
   import {
     UserFilled,
@@ -124,51 +124,26 @@
   } from '@element-plus/icons-vue';
   import { QuestionCircleOutlined, IdcardOutlined } from '@/components/icons';
 
-  defineProps({
+  const props = defineProps({
     cardData: {
       type: Object,
       default: () => ({})
+    },
+    visitUsers: {
+      type: Array,
+      default: () => []
     }
   });
 
-  /** 访问人数 */
-  const visitUsers = ref<AvatarItem[]>([
-    {
-      key: 1,
-      label: 'SunSmile',
-      value:
-        'https://cdn.eleadmin.com/20200609/c184eef391ae48dba87e3057e70238fb.jpg'
-    },
-    {
-      key: 2,
-      label: '你的名字很好听',
-      value:
-        'https://cdn.eleadmin.com/20200609/b6a811873e704db49db994053a5019b2.jpg'
-    },
-    {
-      key: 3,
-      label: '全村人的希望',
-      value:
-        'https://cdn.eleadmin.com/20200609/948344a2a77c47a7a7b332fe12ff749a.jpg'
-    },
-    {
-      key: 4,
-      label: 'Jasmine',
-      value:
-        'https://cdn.eleadmin.com/20200609/f6bc05af944a4f738b54128717952107.jpg'
-    },
-    {
-      key: 5,
-      label: '酷酷的大叔',
-      value:
-        'https://cdn.eleadmin.com/20200609/2d98970a51b34b6b859339c96b240dcd.jpg'
-    },
-    {
-      key: 6,
-      label: '管理员',
-      value: 'https://cdn.eleadmin.com/20200610/avatar.jpg'
-    }
-  ]);
+  const myVisitUsers = computed(() => {
+    return props.visitUsers.map((item: AvatarItem, index: number) => {
+      return {
+          key: index,
+          label: item.name,
+          value: item.avatar
+        };
+    });
+  });
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <!-- 全局页脚 -->
 <template>
   <ele-text type="placeholder" class="ele-footer">
-    <el-space :size="24">
+    <!-- <el-space :size="24">
       <el-link
         underline="never"
         href="https://www.bjzxzy.com.cn/"
@@ -16,7 +16,7 @@
       >
         {{ t('layout.footer.document') }}
       </el-link>
-    </el-space>
+    </el-space> -->
     <div style="margin-top: 8px">
       {{ t('layout.footer.copyright') }}
     </div>

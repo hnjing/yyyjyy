@@ -3,18 +3,33 @@
     <!--<span class="login-logo">
       <img src="/src/assets/logo/login-bg.png" />
     </span>-->
-    <div class="logo-wrapper">
-      <img class="logo-img" src="/src/assets/login/login-left.png" alt="" />
-    </div>
-    <div style="margin-top: 20px; margin-bottom: 15px">
+    <!-- <div class="logo-wrapper">
+      <img
+        class="logo-img"
+        src="/src/assets/logo/logo-yian.png"
+        style="width: 100px"
+        alt=""
+      />
+    </div> -->
+    <div style="margin-top: 80px; margin-bottom: 15px">
       <h1
         style="
           color: #fff;
-          font-size: 36px;
+          font-size: 42px;
           font-weight: bold;
           letter-spacing: 5px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         "
-        >{{ PROJECT_NAME }}</h1
+      >
+        <img
+          class="logo-img"
+          src="/src/assets/logo/logo-yian.png"
+          style="width: 88px; margin-right: 10px"
+          alt=""
+        />
+        {{ PROJECT_NAME }}</h1
       >
       <!-- <img src="/src/assets/logo/login-title.svg" alt="" /> -->
     </div>
@@ -25,23 +40,7 @@
         </div>
       </el-card>
       <div class="footer">
-        <div
-          >Copyright © 北京中兴正远科技有限公司 &nbsp;版权所有
-          <a
-            href="https://beian.miit.gov.cn/"
-            target="_blank"
-            style="
-              color: rgb(230, 162, 60);
-              text-decoration: none;
-              margin-left: 5px;
-            "
-            >京ICP备19031785号-1</a
-          >
-        </div>
-        <div
-          >电话：010-86463913
-          &nbsp;&nbsp;&nbsp;&nbsp;邮箱：zxzy@yuans28.com</div
-        >
+        <div>Copyright © 湖南益安应急救援服务有限公司 &nbsp;版权所有 </div>
       </div>
     </div>
   </div>
@@ -73,7 +72,7 @@
   }
   .footer {
     position: relative;
-    bottom: -47px;
+    bottom: -87px;
     width: 100%;
     line-height: 32px;
     text-align: center;

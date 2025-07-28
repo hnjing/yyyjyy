@@ -30,7 +30,8 @@ export async function pageUsers(params) {
 export async function getUser(id) {
   const res = await request.get('/system/user/' + id);
   if (res.data.code === 200) {
-    return res.data.data;
+    const {postIds, roleIds} = res.data
+    return {...res.data.data, postIds, roleIds};
   }
   return Promise.reject(new Error(res.data.msg));
 }

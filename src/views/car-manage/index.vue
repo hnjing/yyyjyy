@@ -17,7 +17,7 @@
         @reset="onSearch"
       >
         <template #SelectUser>
-          <SelectUser v-model="form.roles" />
+          <SelectUser v-model="form.users" />
         </template>
         <template #toolbar>
           <ele-tooltip
@@ -63,8 +63,8 @@
         <template #image="{ row }">
           <el-image
             style="width: 80px; height: 80px"
-            :src="row.image"
-            :preview-src-list="[row.image]"
+            :src="row.carPic"
+            :preview-src-list="[row.carPic]"
             show-progress
             :preview-teleported="true"
             :teleported="true"
@@ -85,14 +85,14 @@
         </template>
         <!-- 操作列 -->
         <template #action="{ row }">
-          <el-link
+          <!-- <el-link
             type="primary"
             underline="never"
             @click.stop="openDetail(row)"
           >
             查看
           </el-link>
-          <el-divider direction="vertical" />
+          <el-divider direction="vertical" /> -->
           <el-link type="primary" underline="never" @click.stop="openEdit(row)">
             修改
           </el-link>
@@ -116,25 +116,24 @@
       <handleModal
         v-model="visibleModal"
         :handle="handle"
-        :editData="editData || {}"
+        :editData="editData"
       />
     </ele-card>
   </ele-page>
 </template>
 
 <script setup name="CarManage">
-  import { ref, reactive, computed, nextTick } from 'vue';
+  import { ref, reactive, computed, nextTick, provide } from 'vue';
   import { ElMessageBox } from 'element-plus/es';
   import { EleMessage } from '@hnjing/zxzy-admin-plus';
   import { PlusOutlined } from '@/components/icons';
   import { useDictData } from '@/utils/use-dict-data';
-  import { templatePageUsers, listUsers } from '@/api/system/user';
+  import { pageCars, exportCars, removeCar } from '@/api/car';
   import SelectUser from '@/components/SelectUser/index.vue';
   import handleModal from './components/modal.vue';
 
   /** 性别字典数据 */
-  const [sexDicts] = useDictData(['sys_user_sex']);
-  console.log('sexDicts', sexDicts.value);
+  const [typeDicts] = useDictData(['sys_car_type']);
 
   /** 表格实例 */
   const tableRef = ref(null);
@@ -143,7 +142,7 @@
   const form = reactive({
     carNo: '',
     aidCarNo: '',
-    useName: ''
+    users: ''
   });
 
   /** 更新表单数据 */
@@ -170,7 +169,7 @@
     {
       type: 'SelectUser',
       label: '使用人',
-      prop: 'useName'
+      prop: 'users'
     }
   ]);
 
@@ -198,13 +197,13 @@
         minWidth: 110
       },
       {
-        prop: 'users',
+        prop: 'remark2',
         label: '使用人',
         minWidth: 110
       },
       {
         columnKey: 'image',
-        prop: 'image',
+        prop: 'carPic',
         label: '车辆照片',
         minWidth: 100,
         align: 'center',
@@ -213,7 +212,8 @@
       {
         columnKey: 'carType',
         label: '车辆类型',
-        minWidth: 110
+        minWidth: 110,
+        formatter: (row) => (typeDicts.value.filter(i=>String(i.dictValue) === row.carType)[0] || {}).dictLabel
       },
       {
         prop: 'mobile',
@@ -223,7 +223,8 @@
       {
         prop: 'bindTime',
         label: '绑定时间',
-        minWidth: 110
+        minWidth: 110,
+        sortable: 'custom'
       },
       {
         columnKey: 'action',
@@ -262,7 +263,7 @@
 
   /** 表格数据源 */
   const datasource = ({ pages, where, orders, filters }) => {
-    return templatePageUsers({ ...where, ...orders, ...filters, ...pages });
+    return pageCars({ ...where, ...orders, ...filters, ...pages });
   };
 
   /** 表格数据请求完成事件 */
@@ -276,12 +277,7 @@
 
   /** 搜索事件 */
   const onSearch = (where) => {
-    const [d1, d2] = where.createTime ?? [];
-    const time = {
-      createTimeStart: d1 ? `${d1} 00:00:00` : '',
-      createTimeEnd: d2 ? `${d2} 23:59:59` : ''
-    };
-    Object.assign(lastWhere, where, time);
+    Object.assign(lastWhere, where);
     doReload();
   };
 
@@ -306,12 +302,19 @@
 
   /** 删除 */
   const remove = (row) => {
-    ElMessageBox.confirm(`确定要删除“${row.username}”吗?`, '系统提示', {
+    ElMessageBox.confirm(`确定要删除救援车牌号：“${row.aidCarNo}”的绑定吗?`, '系统提示', {
       type: 'warning',
       draggable: true
     })
       .then(() => {
-        EleMessage.success('点击了删除');
+        removeCar(row.id)
+          .then((msg) => {
+            EleMessage.success(msg);
+            reload();
+          })
+          .catch((e) => {
+            EleMessage.error(e.message);
+          });
       })
       .catch(() => {});
   };
@@ -321,8 +324,11 @@
     reload(lastWhere);
   };
 
+   /** 孙子组件刷新表格 */
+  provide('reloadTable', reload);
+
   /** 导出和打印全部数据的数据源 */
   const exportSource = ({ where, orders, filters }) => {
-    return listUsers({ ...where, ...orders, ...filters });
+    return exportCars({ ...where, ...orders, ...filters });
   };
 </script>

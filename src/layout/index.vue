@@ -63,7 +63,7 @@
     <router-layout />
     <!-- logo -->
     <template #logo>
-      <img src="@/assets/logo/logo.png" style="width: 50px; height: 50px; object-fit: contain;" />
+      <img src="@/assets/logo/logo-yian.png" style="width: 50px; height: 50px; object-fit: contain;" />
     </template>
     <template #logoTitle>
       <h1>{{ PROJECT_NAME }}</h1>

@@ -11,7 +11,7 @@
     @updateValue="setFieldValue"
   >
     <template #SelectUser>
-      <SelectUser v-model="form.roles" />
+      <SelectUser v-model="form.certificateUser" />
     </template>
     <template #footer>
       <el-button @click="onClose">关闭</el-button>
@@ -24,20 +24,24 @@
 
 <script lang="ts" setup>
   import ProForm from '@/components/ProForm/index.vue';
-  import { ref, reactive, watch } from 'vue';
+  import { ref, reactive, watch, inject } from 'vue';
   // import { useRouter } from 'vue-router';
   import type { FormInstance, FormRules } from 'element-plus';
   import { EleMessage, emailReg, phoneReg } from '@hnjing/zxzy-admin-plus';
   import { useFormData } from '@/utils/use-form-data';
   // import { usePageTab } from '@/utils/use-page-tab';
   import SelectUser from '@/components/SelectUser/index.vue';
-  import { addUser, updateUser, checkExistence } from '@/api/system/user';
-  import type { User } from '@/api/system/user/model';
+  import { addCertificate, updateCertificate } from '@/api/certificate';
+  import { useUserStore } from '@/store/modules/user';
+
+  const userStore = useUserStore();
 
   const props = defineProps<{
     /** 修改回显的数据 */
-    data?: User | null;
+    data?: any;
   }>();
+
+  const reloadTable = inject<(where?: any) => void>('reloadTable');
 
   const emit = defineEmits(['close']);
 
@@ -55,14 +59,14 @@
 
   /** 表单数据 */
   const [form, resetFields, assignFields, setFieldValue] = useFormData({
-      title: '',
-      personnel: [],
-      dateRange: [],
-      type: '',
-      points: '',
-      date: [],
-      image: [],
-      remark: ''
+      id: '',
+      certificate: '',
+      certificateNo: '',
+      certificateUser: '',
+      certificateType: '',
+      certificateTime: '',
+      certificateDetail: '',
+      certificatePic: ''
     },
     {
       immediate: true
@@ -74,18 +78,18 @@
   const items = ref([
     {
       label: '证书名称',
-      prop: 'title',
+      prop: 'certificate',
       type: 'input',
       required: true
     },
     {
       label: '证书编号',
-      prop: 'certId',
+      prop: 'certificateNo',
       type: 'input'
     },
     {
       label: '获证人员',
-      prop: 'name',
+      prop: 'certificateUser',
       type: 'SelectUser', // 自定义组件
       required: true,
       bind: {
@@ -94,25 +98,25 @@
     },
     {
       label: '证书类型',
-      prop: 'type',
+      prop: 'certificateType',
       type: 'dictSelect',
-      props: { code: 'cert_type' },
+      props: { code: 'sys_certificate_type' },
       required: true
     },
     {
       label: '获证日期',
-      prop: 'date',
+      prop: 'certificateTime',
       type: 'date',
       required: true
     },
     {
       label: '证书描述',
-      prop: 'remark',
+      prop: 'certificateDetail',
       type: 'textarea'
     },
     {
       label: '证书照片',
-      prop: 'image',
+      prop: 'certificatePic',
       type: 'imageUpload',
       props: {
         limit: 5
@@ -131,11 +135,16 @@
         return;
       }
       loading.value = true;
-      const saveOrUpdate = isUpdate.value ? updateUser : addUser;
-      saveOrUpdate(form)
+      const saveOrUpdate = isUpdate.value ? updateCertificate : addCertificate;
+      const params = {
+        ...form,
+        remark1: userStore.userList.filter(i=>form.certificateUser == i.userId).map(i=>i.nickName).join(',')
+      }
+      saveOrUpdate(params)
         .then((msg) => {
           loading.value = false;
           EleMessage.success(msg);
+          reloadTable?.();
           onClose();
         })
         .catch((e) => {
@@ -164,7 +173,7 @@
       if (props.data) {
         assignFields({
           ...props.data,
-          password: ''
+          certificateUser: Number(props.data.certificateUser)
         });
         isUpdate.value = true;
       } else {

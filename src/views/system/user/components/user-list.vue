@@ -58,6 +58,10 @@
     </template>
     <template #action="{ row }">
       <template v-if="row.userId !== 1">
+        <el-link type="primary" underline="never" @click="openCode(row)">
+          生成二维码
+        </el-link>
+        <el-divider direction="vertical" />
         <el-link
           type="primary"
           underline="never"
@@ -103,6 +107,8 @@
   <user-import v-model="showImport" @done="reload" />
   <!-- 分配角色弹窗 -->
   <user-role v-model="showRole" :data="current" />
+  <!-- 二维码 -->
+  <user-code v-model="showCode" :data="current" />
 </template>
 
 <script setup>
@@ -122,6 +128,7 @@
   import UserEdit from './user-edit.vue';
   import UserImport from './user-import.vue';
   import UserRole from './user-role.vue';
+  import UserCode from './user-code.vue';
   import {
     pageUsers,
     removeUsers,
@@ -166,13 +173,13 @@
       },
       {
         prop: 'userName',
-        label: '用户名称',
+        label: '账号',
         align: 'center',
         minWidth: 100
       },
       {
         prop: 'nickName',
-        label: '用户昵称',
+        label: '姓名',
         align: 'center',
         minWidth: 110
       },
@@ -184,14 +191,14 @@
         sortable: 'custom'
       },
       {
-        prop: 'ranking',
+        prop: 'sco',
         label: '荣誉积分',
         align: 'center',
         minWidth: 110,
         sortable: 'custom'
       },
       {
-        prop: 'dept.deptName',
+        prop: 'deptName',
         label: '部门',
         align: 'center',
         minWidth: 100
@@ -224,7 +231,7 @@
       {
         columnKey: 'action',
         label: '操作',
-        width: 180,
+        width: 280,
         align: 'center',
         slot: 'action',
         hideInPrint: true,
@@ -247,6 +254,9 @@
 
   /** 是否显示分配角色弹窗 */
   const showRole = ref(false);
+
+  /** 是否显示二维码 */
+  const showCode = ref(false);
 
   /** 操作列更多下拉菜单 */
   const moreItems = computed(() => {
@@ -279,6 +289,12 @@
   /** 打开编辑弹窗 */
   const openImport = () => {
     showImport.value = true;
+  };
+
+  /** 打开二维码 */
+  const openCode = (row) => {
+    current.value = row ?? null;
+    showCode.value = true;
   };
 
   /** 批量删除 */

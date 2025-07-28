@@ -2,7 +2,10 @@
   <ele-page class="workplace-page">
     <!-- <profile-card /> -->
     <!-- <link-card ref="linkCardRef" /> -->
-    <StatisticsCard :cardData="pageData?.statistics" />
+    <StatisticsCard
+      :cardData="pageData?.statistics"
+      :visitUsers="pageData?.userRanking"
+    />
 
     <el-row :gutter="8" ref="wrapRef">
       <el-col v-for="(item, index) in data" :key="item.name" :span="item.md">
@@ -84,6 +87,11 @@
   import GoalCard from './components/goal-card.vue';
   import ProjectCard from './components/project-card.vue';
   import UserList from './components/user-list.vue';
+  import { pageHomeDetail } from '@/api/workplace';
+  import { useDictData } from '@/utils/use-dict-data';
+
+  /** 字典数据 */
+  const [certTypeDicts] = useDictData(['sys_certificate_type']);
 
   defineOptions({
     name: 'DashboardWorkplace',
@@ -98,7 +106,7 @@
 
   const CACHE_KEY = 'workplace-layout';
 
-  const pageData = {
+  const pageData = ref({
     statistics: {
       // 总人数
       totalUserNumber: 158,
@@ -163,38 +171,7 @@
       }
     ],
     // 救援次数排名
-    rescueRanking: [
-      {
-        ranking: 1,
-        name: '张三',
-        number: 11
-      },
-      {
-        ranking: 2,
-        name: '李四',
-        number: 4
-      },
-      {
-        ranking: 3,
-        name: '王五',
-        number: 3
-      },
-      {
-        ranking: 4,
-        name: '赵六',
-        number: 2
-      },
-      {
-        ranking: 4,
-        name: '钱七',
-        number: 2
-      },
-      {
-        ranking: 5,
-        name: '王平',
-        number: 1
-      }
-    ],
+    rescueRanking: [],
     // 人员积分排名
     userRanking: [
       {
@@ -267,11 +244,61 @@
         name: '赵六'
       }
     ]
-  };
+  });
 
   // 页面初始化数据
   const init = () => {
     // todo获取初始数据
+    pageHomeDetail().then((res) => {
+      console.log('res', res);
+      pageData.value = {
+        statistics: {
+          totalUserNumber: res.userTotal,
+          totalRescueNumber: res.activityTotal,
+          totalCertificateNumber: res.certificateTotal,
+          totalLicenseNumber: res.carTotal
+        },
+        rescueRanking: res.userCountList.map((i, index) => {
+          return {
+            ranking: index + 1,
+            name: i.nickName,
+            number: i.count
+          };
+        }),
+        userRanking: res.userScoList.map((i) => {
+          return {
+            name: i.nickName,
+            ranking: i.sco,
+            avatar: i.headurl,
+            roleName: i.roleName
+          };
+        }),
+        certificateList: res.certificateList.map((i) => {
+          return {
+            id: i.id,
+            title: i.certificate,
+            cover: JSON.parse(i.certificatePic)[0],
+            typeName: (
+              certTypeDicts.value.filter(
+                (item) => String(item.dictValue) === i.certificateType
+              )[0] || {}
+            ).dictLabel,
+            gainTime: i.certificateTime,
+            name: i.remark1
+          };
+        }),
+        experience: res.activityList.map((i) => {
+          return {
+            title: i.activityTitle,
+            startDate: i.activityStartTime,
+            endDate: i.activityEndTime,
+            description: i.activityContent,
+            images: i.activityPicList,
+            names: i.remark1.split(',')
+          };
+        })
+      };
+    });
   };
 
   /** 默认布局 */

@@ -130,7 +130,9 @@ service.interceptors.response.use(
       }
     }
     // 登录过期处理
+    console.log('拦截器res.data', res.data);
     if (res.data?.code === 401) {
+      
       const { path, fullPath } = unref(router.currentRoute);
       if (path == LAYOUT_PATH) {
         logout(true, void 0, router.push);

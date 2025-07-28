@@ -17,7 +17,7 @@
         @reset="onSearch"
       >
         <template #SelectUser>
-          <SelectUser v-model="form.roles" multiple />
+          <SelectUser v-model="form.user" />
         </template>
         <template #toolbar>
           <ele-tooltip
@@ -62,8 +62,8 @@
         <template #image="{ row }">
           <el-image
             style="width: 80px; height: 80px"
-            :src="urlList[0]"
-            :preview-src-list="urlList"
+            :src="row.activityPicList[0]"
+            :preview-src-list="row.activityPicList"
             show-progress
             :preview-teleported="true"
             :teleported="true"
@@ -73,14 +73,6 @@
         </template>
         <!-- 操作列 -->
         <template #action="{ row }">
-          <el-link
-            type="primary"
-            underline="never"
-            @click.stop="openDetail(row)"
-          >
-            查看
-          </el-link>
-          <el-divider direction="vertical" />
           <el-link type="primary" underline="never" @click.stop="openEdit(row)">
             修改
           </el-link>
@@ -111,32 +103,20 @@
 </template>
 
 <script setup name="ActiveManage">
-  import { ref, reactive, computed, nextTick } from 'vue';
+  import { ref, reactive, computed, nextTick, provide } from 'vue';
   import { ElMessageBox } from 'element-plus/es';
   import { EleMessage } from '@hnjing/zxzy-admin-plus';
   import { PlusOutlined } from '@/components/icons';
   import { useDictData } from '@/utils/use-dict-data';
-  import { pageActivitys, listActivitys } from '@/api/activity';
+  import { pageActivitys, listActivitys, removeActivity } from '@/api/activity';
   import handleModal from './components/modal.vue';
   import SelectUser from '@/components/SelectUser/index.vue';
 
   /** 性别字典数据 */
-  const [sexDicts] = useDictData(['sys_user_sex']);
-  console.log('sexDicts', sexDicts.value);
+  const [typeDicts] = useDictData(['sys_activity_type']);
 
   /** 表格实例 */
   const tableRef = ref(null);
-
-  const urlList = ref([
-    'https://cdn.eleadmin.com/20200610/RZ8FQmZfHkcffMlTBCJllBFjEhEsObVo.jpg',
-    'https://cdn.eleadmin.com/20200610/WLXm7gp1EbLDtvVQgkeQeyq5OtDm00Jd.jpg',
-    'https://cdn.eleadmin.com/20200610/4Z0QR2L0J1XStxBh99jVJ8qLfsGsOgjU.jpg',
-    'https://cdn.eleadmin.com/20200610/ttkIjNPlVDuv4lUTvRX8GIlM2QqSe0jg.jpg',
-    'https://cdn.eleadmin.com/20200610/fAenQ8nvRjL7x0i0jEfuDBZHvJfHf3v6.jpg',
-    'https://cdn.eleadmin.com/20200610/LrCTN2j94lo9N7wEql7cBr1Ux4rHMvmZ.jpg',
-    'https://cdn.eleadmin.com/20200610/yeKvhT20lMU0f1T3Y743UlGEOLLnZSnp.jpg',
-    'https://cdn.eleadmin.com/20200610/CyrCNmTJfv7D6GFAg39bjT3eRkkRm5dI.jpg'
-  ]);
 
   /** 表单数据 */
   const form = reactive({
@@ -156,7 +136,7 @@
     {
       type: 'input',
       label: '活动名称',
-      prop: 'carNo',
+      prop: 'activityTitle',
       props: {
         labelWidth: '120px'
       }
@@ -164,16 +144,13 @@
     {
       type: 'SelectUser',
       label: '相关人员',
-      prop: 'aidCarNo',
-      bind: {
-        multiple: true
-      }
+      prop: 'user'
     },
     {
       label: '活动类型',
-      prop: 'type',
+      prop: 'activityType',
       type: 'dictSelect',
-      props: { code: 'active_type' }
+      props: { code: 'sys_activity_type' }
     }
   ]);
 
@@ -191,12 +168,12 @@
         fixed: 'left'
       },
       {
-        prop: 'title',
+        prop: 'activityTitle',
         label: '活动名称',
         minWidth: 110
       },
       {
-        prop: 'personnel',
+        prop: 'remark1',
         label: '相关人员',
         minWidth: 110
       },
@@ -209,48 +186,35 @@
         slot: 'image'
       },
       {
-        columnKey: 'type',
+        columnKey: 'activityType',
         label: '活动类型',
         minWidth: 110,
-        filters: [
-          {
-            text: '志愿活动',
-            value: '1'
-          },
-          {
-            text: '救援活动',
-            value: '2'
-          }
-        ],
-        filterMultiple: false,
-        filterMethod: (value, row) => {
-          return row.type === value;
-        }
+        formatter: (row) => (typeDicts.value.filter(i=>String(i.dictValue) === row.activityType)[0] || {}).dictLabel
       },
       {
-        prop: 'points',
+        prop: 'activitySco',
         label: '活动积分',
         minWidth: 110,
         sortable: 'custom'
       },
       {
-        prop: 'startDate',
+        prop: 'activityStartTime',
         label: '开始时间',
         minWidth: 110,
         sortable: 'custom'
       },
       {
-        prop: 'endDate',
+        prop: 'activityEndTime',
         label: '结束时间',
         minWidth: 110
       },
       {
-        prop: 'description',
+        prop: 'activityContent',
         label: '活动描述',
         minWidth: 110
       },
       {
-        prop: 'createName',
+        prop: 'createUser',
         label: '创建人',
         minWidth: 110
       },
@@ -334,7 +298,6 @@
 
   /** 编辑 */
   const openEdit = (row) => {
-    debugger;
     handle.value = row ? 'edit' : 'add';
     editData.value = row || null;
     visibleModal.value = true;
@@ -342,12 +305,19 @@
 
   /** 删除 */
   const remove = (row) => {
-    ElMessageBox.confirm(`确定要删除“${row.username}”吗?`, '系统提示', {
+    ElMessageBox.confirm(`确定要删除“${row.activityTitle}”的活动吗?`, '系统提示', {
       type: 'warning',
       draggable: true
     })
       .then(() => {
-        EleMessage.success('点击了删除');
+        removeActivity(row.id)
+          .then((msg) => {
+            EleMessage.success(msg);
+            reload();
+          })
+          .catch((e) => {
+            EleMessage.error(e.message);
+          });
       })
       .catch(() => {});
   };
@@ -356,6 +326,9 @@
   const doReload = () => {
     reload(lastWhere);
   };
+
+  /** 孙子组件刷新表格 */
+  provide('reloadTable', reload);
 
   /** 导出和打印全部数据的数据源 */
   const exportSource = ({ where, orders, filters }) => {

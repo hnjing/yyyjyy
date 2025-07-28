@@ -16,12 +16,12 @@
     >
       <el-row :gutter="16">
         <el-col :sm="12" :xs="24">
-          <el-form-item label="用户昵称" prop="nickName">
+          <el-form-item label="姓名" prop="nickName">
             <el-input
               clearable
               :maxlength="30"
               v-model="form.nickName"
-              placeholder="请输入用户名"
+              placeholder="请输入姓名"
               autocomplete="off"
             />
           </el-form-item>
@@ -33,12 +33,12 @@
               placeholder="请输入手机号码"
             />
           </el-form-item>
-          <el-form-item v-if="!isUpdate" label="用户名称" prop="userName">
+          <el-form-item v-if="!isUpdate" label="用户账号" prop="userName">
             <el-input
               clearable
               :maxlength="30"
               v-model="form.userName"
-              placeholder="请输入用户名称"
+              placeholder="请输入用户账号"
             />
           </el-form-item>
           <el-form-item label="用户性别" prop="sex">
@@ -48,18 +48,18 @@
               placeholder="请选择用户性别"
             />
           </el-form-item>
-          <el-form-item label="岗位" prop="postIds">
+          <el-form-item label="职务" prop="postIds">
             <post-select v-model="form.postIds" />
           </el-form-item>
-          <el-form-item label="身份证" prop="idCard">
+          <el-form-item label="身份证" prop="idcard">
             <el-input
               clearable
               :maxlength="30"
-              v-model="form.idCard"
+              v-model="form.idcard"
               placeholder="请输入用户身份证号"
             />
           </el-form-item>
-          <el-form-item label="紧急联系人" prop="emergencyContact">
+          <el-form-item label="紧急联系人" prop="contactpeople">
             <el-input
               clearable
               :maxlength="30"
@@ -72,7 +72,7 @@
               clearable
               :maxlength="30"
               v-model="form.helpno"
-              placeholder="请输入救援编号如：YA-2025-001"
+              placeholder="请输入救援编号如：SOS-2025-001"
             />
           </el-form-item>
         </el-col>
@@ -106,12 +106,12 @@
               v-model="form.status"
             />
           </el-form-item>
-          <el-form-item label="角色" prop="roleIds">
+          <el-form-item label="系统角色" prop="roleIds">
             <role-select v-model="form.roleIds" />
           </el-form-item>
-          <el-form-item v-if="!isUpdate" label="血型" prop="blood">
+          <el-form-item label="血型" prop="blood">
             <dict-data
-              code="sys_normal_disable"
+              code="sys_blood_type"
               type="select"
               v-model="form.blood"
             />
@@ -135,6 +135,9 @@
           placeholder="请输入内容"
         />
       </el-form-item>
+      <el-form-item label="头像" prop='headurl'>
+        <ImageUpload v-model="form.headurl" :limit="1"/>
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button @click="handleCancel">取消</el-button>
@@ -153,6 +156,7 @@
   import PostSelect from './post-select.vue';
   import DeptSelect from '../../dept/components/dept-select.vue';
   import { addUser, updateUser, getUser } from '@/api/system/user';
+  import ImageUpload from '@/components/ImageUpload/index.vue'
 
   const props = defineProps({
     /** 修改回显的数据 */
@@ -189,11 +193,12 @@
     roleIds: [],
     postIds: [],
     remark: '',
-    idCard: '',
+    idcard: '',
     blood: void 0,
     helpno: '',
     contactpeople: '',
-    contactmobile: ''
+    contactmobile: '',
+    headurl: ''
   });
 
   /** 表单验证规则 */
@@ -304,6 +309,7 @@
         assignFields({ ...props.data, password: '' });
         getUser(props.data.userId)
           .then((data) => {
+            debugger;
             assignFields({
               ...props.data,
               roleIds: data.roleIds,

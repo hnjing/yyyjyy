@@ -19,7 +19,9 @@ export const useUserStore = defineStore('user', {
     /** 字典数据缓存 */
     dicts: {},
     /** 菜单切换 */
-    menusSwitch: false
+    menusSwitch: false,
+    /** 用户列表 */
+    userList: []
   }),
   actions: {
     /**
@@ -100,6 +102,9 @@ export const useUserStore = defineStore('user', {
         return;
       }
       this.dicts[code] = value;
+    },
+    setUserList (list){
+      this.userList = list
     }
   }
 });

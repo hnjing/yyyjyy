@@ -17,7 +17,7 @@
         @reset="onSearch"
       >
         <template #SelectUser>
-          <SelectUser v-model="form.roles" />
+          <SelectUser v-model="form.certificateUser" />
         </template>
         <template #toolbar>
           <ele-tooltip
@@ -62,8 +62,8 @@
         <template #image="{ row }">
           <el-image
             style="width: 80px; height: 80px"
-            :src="urlList[0]"
-            :preview-src-list="urlList"
+            :src="JSON.parse(row.certificatePic)[0]"
+            :preview-src-list="JSON.parse(row.certificatePic)"
             show-progress
             :preview-teleported="true"
             :teleported="true"
@@ -96,39 +96,27 @@
       <handleModal
         v-model="visibleModal"
         :handle="handle"
-        :editData="editData || {}"
+        :editData="editData"
       />
     </ele-card>
   </ele-page>
 </template>
 
 <script setup name="CertManage">
-  import { ref, reactive, computed, nextTick } from 'vue';
+  import { ref, reactive, computed, nextTick, provide } from 'vue';
   import { ElMessageBox } from 'element-plus/es';
   import { EleMessage } from '@hnjing/zxzy-admin-plus';
   import { PlusOutlined } from '@/components/icons';
   import { useDictData } from '@/utils/use-dict-data';
-  import { templatePageUsers, listUsers } from '@/api/system/user';
+  import { pageCertificates, exportCertificates, removeCertificate } from '@/api/certificate';
   import handleModal from './components/modal.vue';
   import SelectUser from '@/components/SelectUser/index.vue';
 
   /** 性别字典数据 */
-  const [sexDicts] = useDictData(['sys_user_sex']);
-  console.log('sexDicts', sexDicts.value);
+  const [typeDicts] = useDictData(['sys_certificate_type']);
 
   /** 表格实例 */
   const tableRef = ref(null);
-
-  const urlList = ref([
-    'https://cdn.eleadmin.com/20200610/RZ8FQmZfHkcffMlTBCJllBFjEhEsObVo.jpg',
-    'https://cdn.eleadmin.com/20200610/WLXm7gp1EbLDtvVQgkeQeyq5OtDm00Jd.jpg',
-    'https://cdn.eleadmin.com/20200610/4Z0QR2L0J1XStxBh99jVJ8qLfsGsOgjU.jpg',
-    'https://cdn.eleadmin.com/20200610/ttkIjNPlVDuv4lUTvRX8GIlM2QqSe0jg.jpg',
-    'https://cdn.eleadmin.com/20200610/fAenQ8nvRjL7x0i0jEfuDBZHvJfHf3v6.jpg',
-    'https://cdn.eleadmin.com/20200610/LrCTN2j94lo9N7wEql7cBr1Ux4rHMvmZ.jpg',
-    'https://cdn.eleadmin.com/20200610/yeKvhT20lMU0f1T3Y743UlGEOLLnZSnp.jpg',
-    'https://cdn.eleadmin.com/20200610/CyrCNmTJfv7D6GFAg39bjT3eRkkRm5dI.jpg'
-  ]);
 
   /** 表单数据 */
   const form = reactive({
@@ -148,19 +136,19 @@
     {
       type: 'SelectUser',
       label: '获证人员',
-      prop: 'name'
+      prop: 'certificateUser'
     },
     {
       type: 'input',
       label: '证书名称',
-      prop: 'title',
+      prop: 'certificate',
       props: {
         labelWidth: '120px'
       }
     },
     {
       label: '证书编号',
-      prop: 'certId',
+      prop: 'certificateNo',
       type: 'input',
       props: {
         labelWidth: '120px'
@@ -168,9 +156,9 @@
     },
     {
       label: '证书类型',
-      prop: 'type',
+      prop: 'certificateType',
       type: 'dictSelect',
-      props: { code: 'cert_type' }
+      props: { code: 'sys_certificate_type' }
     }
   ]);
 
@@ -188,49 +176,36 @@
         fixed: 'left'
       },
       {
-        prop: 'certId',
+        prop: 'certificateNo',
         label: '证书编号',
         minWidth: 110
       },
       {
-        prop: 'title',
+        prop: 'certificate',
         label: '证书名称',
         minWidth: 110
       },
       {
-        prop: 'name',
+        prop: 'remark1',
         label: '获证人员',
         minWidth: 110
       },
       {
         columnKey: 'image',
-        prop: 'image',
+        prop: 'certificatePic',
         label: '证书照片',
         minWidth: 100,
         align: 'center',
         slot: 'image'
       },
       {
-        columnKey: 'type',
+        columnKey: 'certificateType',
         label: '证书类型',
         minWidth: 110,
-        filters: [
-          {
-            text: '荣誉证书',
-            value: '1'
-          },
-          {
-            text: '技能证书',
-            value: '2'
-          }
-        ],
-        filterMultiple: false,
-        filterMethod: (value, row) => {
-          return row.type === value;
-        }
+        formatter: (row) => (typeDicts.value.filter(i=>String(i.dictValue) === row.certificateType)[0] || {}).dictLabel
       },
       {
-        prop: 'date',
+        prop: 'certificateTime',
         label: '获证日期',
         minWidth: 110,
         sortable: 'custom'
@@ -272,7 +247,7 @@
 
   /** 表格数据源 */
   const datasource = ({ pages, where, orders, filters }) => {
-    return templatePageUsers({ ...where, ...orders, ...filters, ...pages });
+    return pageCertificates({ ...where, ...orders, ...filters, ...pages });
   };
 
   /** 表格数据请求完成事件 */
@@ -316,12 +291,19 @@
 
   /** 删除 */
   const remove = (row) => {
-    ElMessageBox.confirm(`确定要删除“${row.username}”吗?`, '系统提示', {
+    ElMessageBox.confirm(`确定要删除“${row.certificate}”证书吗?`, '系统提示', {
       type: 'warning',
       draggable: true
     })
       .then(() => {
-        EleMessage.success('点击了删除');
+        removeCertificate(row.id)
+          .then((msg) => {
+            EleMessage.success(msg);
+            reload();
+          })
+          .catch((e) => {
+            EleMessage.error(e.message);
+          });
       })
       .catch(() => {});
   };
@@ -331,8 +313,11 @@
     reload(lastWhere);
   };
 
+  /** 孙子组件刷新表格 */
+  provide('reloadTable', reload);
+
   /** 导出和打印全部数据的数据源 */
   const exportSource = ({ where, orders, filters }) => {
-    return listUsers({ ...where, ...orders, ...filters });
+    return exportCertificates({ ...where, ...orders, ...filters });
   };
 </script>

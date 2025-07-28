@@ -96,7 +96,7 @@
 </template>
 
 <script setup>
-  import { ref, toRefs } from 'vue';
+  import { onMounted, ref, toRefs, watch } from 'vue';
   import VueDraggable from 'vuedraggable';
   import { DragOutlined } from '@hnjing/zxzy-admin-plus/es/icons';
   import MoreIcon from './more-icon.vue';
@@ -122,8 +122,6 @@
     emit('command', command);
   };
 
-  queryTaskList();
-
   /** 我的任务表格左侧列是否固定状态 */
   const isPingLeft = ref(false);
 
@@ -131,6 +129,14 @@
   const handleTaskTableScroll = ({ scrollLeft }) => {
     isPingLeft.value = scrollLeft > 1;
   };
+
+  watch(
+    () => props.cardData,
+    () => {
+      queryTaskList();
+    },
+    { immediate: true }
+  );
 </script>
 
 <style lang="scss" scoped>

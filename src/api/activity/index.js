@@ -13,7 +13,7 @@ export async function pageActivitys(params) {
 }
 
 /**
- * 添加岗位
+ * 添加活动
  */
 export async function addActivity(data) {
   const res = await request.post('/system/activity', data);
@@ -24,7 +24,7 @@ export async function addActivity(data) {
 }
 
 /**
- * 修改岗位
+ * 修改活动
  */
 export async function updateActivity(data) {
   const res = await request.put('/system/activity', data);
@@ -35,7 +35,7 @@ export async function updateActivity(data) {
 }
 
 /**
- * 删除岗位
+ * 删除活动
  */
 export async function removeActivity(id) {
   const res = await request.delete('/system/activity/' + id);
@@ -46,7 +46,7 @@ export async function removeActivity(id) {
 }
 
 /**
- * 批量删除岗位
+ * 批量删除活动
  */
 export async function removeActivitys(ids) {
   const res = await request.delete('/system/activity/' + ids.join());
@@ -57,7 +57,7 @@ export async function removeActivitys(ids) {
 }
 
 /**
- * 导出岗位列表
+ * 导出活动列表
  */
 export async function exportActivitys(params) {
   const res = await request({
@@ -71,7 +71,7 @@ export async function exportActivitys(params) {
 }
 
 /**
- * 查询岗位列表
+ * 查询活动列表
  */
 export async function listActivitys(params) {
   const res = await request.get('/system/activity/optionselect', {

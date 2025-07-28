@@ -13,18 +13,28 @@
       body {
           font-family: 'Noto Sans SC', sans-serif;
       }
+      .person-info {
+        display: none;
+      }
+      .person-info-empty {
+        display: none;
+        text-align: center;
+        margin-top: 100px;
+        font-size: 24px;
+      }
     </style>
   </head>
   <body class="bg-gray-100">
     <div class="max-w-md mx-auto bg-white min-h-screen shadow-sm">
       <!-- 顶部标题栏 -->
-      <header class="bg-blue-600 text-white p-4 text-center">
+      <header class="bg-blue-600 text-white p-2 text-center">
         <h1 class="text-xl font-bold flex items-center justify-center">
-          益阳紧急救援中心
+          <img src="./logo-yian.png" alt="logo" class="w-10 h-10 mr-2">
+          湖南益安应急救援中心
         </h1>
       </header>
       <!-- 人员信息卡片 -->
-      <main class="p-4 mb-6">
+      <main class="p-4 mb-6 person-info">
         <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
           <!-- 头像和基本信息 -->
           <div class="flex items-center p-4 border-b">
@@ -46,8 +56,8 @@
               <div class="flex items-center text-gray-600 mt-1">
                 <i class="fas fa-venus-mars mr-1 text-blue-500"> </i>
                 <span class="mr-3" id="sex"> 男 </span>
-                <i class="fas fa-birthday-cake mr-1 text-blue-500"> </i>
-                <span id="age"> 32岁 </span>
+                <!-- <i class="fas fa-birthday-cake mr-1 text-blue-500"> </i>
+                <span id="age"> 32岁 </span> -->
                 <i class="fas fa-tint ml-3 mr-1 text-blue-500"> </i>
                 <span id="bloodType"> O型血 </span>
               </div>
@@ -57,7 +67,11 @@
               </div>
               <div class="text-sm text-gray-500 mt-1">
                 <i class="fas fa-building mr-1 text-blue-500"> </i>
-                <span id="department"> 所属部门: 应急救援一队 </span>
+                <span> 所属部门: <span id="department"></span> </span>
+              </div>
+              <div class="text-sm text-gray-500 mt-1">
+                <i class="fas fa-award mr-1 text-blue-500"> </i>
+                <span> 职   务: <span id="posts"></span> </span>
               </div>
             </div>
           </div>
@@ -74,7 +88,7 @@
                 <p class="text-gray-600 mb-1">手机: <a id="phone" href="tel:13873331234">13873331234</a></p>
                 <p class="text-gray-600">紧急联系人: 
                   <span id="emergencyContact">李四</span> 
-                  (<span id="emergencyContactRelation">父亲</span>)
+                  <!-- (<span id="emergencyContactRelation">父亲</span>) -->
                 </p>
               </div>
             </div>
@@ -193,6 +207,9 @@
           </div>
         </div>
       </main>
+      <div class="person-info-empty">
+        该人员已与本中心无关联,如有疑问可联系中心电话
+      </div>
       <!-- 底部操作栏 -->
       <footer
         class="fixed bottom-0 left-0 right-0 bg-white border-t p-3 max-w-md mx-auto"
@@ -217,13 +234,14 @@
     </div>
     <script>
 
-      function init() {
-        const data = {
+      async function init() {
+        const baseUrl = 'http://43.136.68.215:8081/'; // 替换为你的后端接口地址
+        const urlParams = new URLSearchParams(window.location.search);
+        let data = {
           id: 1,
           avatar: 'https://design.gemcoder.com/staticResource/echoAiSystemImages/c1a60c5f6e7e18cc77177bc341302d61.png',
           name: '王平',
           sex: '男',
-          age: 32,
           bloodTypeName: 'O型血',
           phone: '13812341234',
           rescueNumber: 'RESC-2023-001',
@@ -263,14 +281,75 @@
             }
           ]
         }
+        // 调用接口获取个人数据
+        const ajax = await fetch(`${baseUrl}system/homeDetail/qrCodeInfo`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: urlParams.get('id')
+          })
+        })
+        const res = await ajax.json();
+        if(res.code !== 200) {
+          // 当前人员已不存在
+          if(res.code === 10000){
+            document.querySelector('.person-info-empty').style.display = 'block';
+            return;
+          }
+          console.log('接口异常：', res)
+          return;
+        }
+        console.log(res)
+        const {sysUser,certificateList,carList,aidActivityList} = res
+        if(sysUser.status !== '0'){
+          document.querySelector('.person-info-empty').innerHTML = '该人员已被中心停用，如需使用请联系中心管理员';
+          document.querySelector('.person-info-empty').style.display = 'block';
+          return;
+        }
+        document.querySelector('.person-info').style.display = 'block';
+        data = {
+          avatar: sysUser.headurl,
+          name: sysUser.nickName,
+          department: sysUser?.dept?.deptName,
+          posts: sysUser?.postName,
+          sex: sysUser.sex?'女':'男',
+          bloodTypeName: sysUser.blood == '2'?'A型': sysUser.blood == '3'?'B型': sysUser.blood == '4'?'C型': sysUser.blood == '5'?'AB型': '未知',
+          phone: sysUser.phonenumber,
+          rescueNumber: sysUser.helpno,
+          department: sysUser.dept?.deptName,
+          emergencyContact: sysUser.contactpeople,
+          emergencyContactPhone: sysUser.contactmobile,
+          carInfo: carList.map(item => {
+            return {
+              carNo: item.carNo,
+              aidCarNo: item.aidCarNo,
+              carImage: item.carPic
+            }
+          }),
+          honorCertificate: [...certificateList?.map(item => JSON.parse(item.certificatePic))],
+          experience: aidActivityList.map(item => {
+            return {
+              title: item.activityTitle,
+              date: item.activityStartTime,
+              endDate: item.activityEndTime,
+              description: item.activityContent
+            }
+          })
+        }
         // 需要设置的元素
-        const setContentList = ['avatar', 'name', 'sexAgeBlood', 'profileId', 'profileDept', 'phone', 'contactEmergency', 'carInfoList', 'honorCertificate', 'experienceList']
+        const setContentList = ['posts', 'department', 'name', 'sexAgeBlood', 'profileId', 'profileDept', 'phone', 'contactEmergency', 'carInfoList', 'honorCertificate', 'experienceList']
         setContentList.forEach(item => {
           const element = document.querySelector(`#${item}`);
           if (element) {
             element.textContent = data[item];
           }
         });
+
+        // 设置头像
+        const avatar = document.querySelector('#avatar');
+        avatar.src = data.avatar;
 
         // 设置车辆信息
         const carInfo = document.querySelector('#carInfoList');
@@ -289,7 +368,11 @@
           `;
           return div;
         });
-        carInfo.append(...carInfoListItems);
+        if(carInfoListItems.length){
+          carInfo.append(...carInfoListItems);
+        }else{
+          carInfo.innerHTML = '暂无车辆信息';
+        }
         
         // 荣誉证书
         const honorCertificate = document.querySelector('#honorCertificate');
@@ -310,7 +393,7 @@
           div.innerHTML = `
             <div class="flex justify-between items-center mb-1">
               <span class="font-medium">${exp.title}</span>
-              <span class="text-sm text-gray-500">${exp.date}</span>
+              <span class="text-sm text-gray-500">${exp.date}~${exp.endDate}</span>
             </div>
             <p class="text-sm text-gray-600">${exp.description}</p>
           `;
@@ -334,7 +417,7 @@
           window.location.href = `tel:${data.emergencyContactPhone}`;
         };
         document.getElementById('center-phone-btn').onclick = function () {
-          window.location.href = `tel:18573169949`;
+          window.location.href = `tel:13574739204`;
         };
       }
 

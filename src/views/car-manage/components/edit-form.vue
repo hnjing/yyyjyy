@@ -12,7 +12,7 @@
     @updateValue="setFieldValue"
   >
     <template #SelectUser>
-      <SelectUser v-model="form.roles" />
+      <SelectUser v-model="form.users" />
     </template>
     <template #footer>
       <el-button @click="onClose">关闭</el-button>
@@ -25,19 +25,23 @@
 
 <script lang="ts" setup>
   import ProForm from '@/components/ProForm/index.vue';
-  import { ref, reactive, watch } from 'vue';
+  import { ref, reactive, watch, inject } from 'vue';
   // import { useRouter } from 'vue-router';
   import type { FormInstance, FormRules } from 'element-plus';
   import { EleMessage, emailReg, phoneReg } from '@hnjing/zxzy-admin-plus';
   import { useFormData } from '@/utils/use-form-data';
   // import { usePageTab } from '@/utils/use-page-tab';
   import SelectUser from '@/components/SelectUser/index.vue';
-  import { addUser, updateUser, checkExistence } from '@/api/system/user';
-  import type { User } from '@/api/system/user/model';
+  import { addCar, updateCar } from '@/api/car';
+  import { useUserStore } from '@/store/modules/user';
+
+  const userStore = useUserStore();
+
+  const reloadTable = inject<(where?: any) => void>('reloadTable');
 
   const props = defineProps<{
     /** 修改回显的数据 */
-    data?: User | null;
+    data?: any;
   }>();
 
   const emit = defineEmits(['close']);
@@ -55,16 +59,16 @@
   const formRef = ref<FormInstance | null>(null);
 
   /** 表单数据 */
-  const [form, resetFields, assignFields, setFieldValue] = useFormData<User>({
-    userId: void 0,
-    username: '',
-    nickname: '',
-    sex: void 0,
-    roles: [],
-    email: '',
-    phone: '',
-    password: '',
-    introduction: ''
+  const [form, resetFields, assignFields, setFieldValue] = useFormData({
+    id: '',
+    aidCarNo: '',
+    carNo: '',
+    users: '',
+    carType: '',
+    mobile: '',
+    carPic: '',
+    bindTime: '',
+    remark1: ''
   });
 
   /** 表单项 */
@@ -83,88 +87,44 @@
     },
     {
       label: '使用人',
-      prop: 'useName',
+      prop: 'users',
       type: 'SelectUser', // 自定义组件
       required: true
     },
     {
       label: '车辆类型',
-      prop: 'sex',
+      prop: 'carType',
       type: 'dictSelect',
-      props: { code: 'car_type' },
+      props: { code: 'sys_car_type' },
       required: true
     },
     {
       label: '联系电话',
-      prop: 'phone',
+      prop: 'mobile',
       type: 'input'
     },
     {
       label: '车辆照片',
-      prop: 'carPhoto',
+      prop: 'carPic',
       type: 'imageUpload',
       props: {
         limit: 1
-      }
+      },
+      required: true
+    },
+    {
+      label: '绑定时间',
+      prop: 'bindTime',
+      type: 'date',
+      required: true
     },
     {
       label: '备注',
-      prop: 'remark',
+      prop: 'remark1',
       type: 'textarea'
     }
   ]);
 
-  /** 表单验证规则 */
-  const rules = reactive<FormRules>({
-    username: [
-      {
-        required: true,
-        type: 'string',
-        trigger: 'blur',
-        validator: (_rule: any, value: string, callback: any) => {
-          if (!value) {
-            return callback(new Error('请输入用户账号'));
-          }
-          checkExistence('username', value, props.data?.userId)
-            .then(() => {
-              callback(new Error('账号已经存在'));
-            })
-            .catch(() => {
-              callback();
-            });
-        }
-      }
-    ],
-    email: [
-      {
-        pattern: emailReg,
-        message: '邮箱格式不正确',
-        type: 'string',
-        trigger: 'blur'
-      }
-    ],
-    password: [
-      {
-        required: true,
-        type: 'string',
-        trigger: 'blur',
-        validator: (_rule: any, value: string, callback: any) => {
-          if (isUpdate.value || /^[\S]{5,18}$/.test(value)) {
-            return callback();
-          }
-          callback(new Error('密码必须为5-18位非空白字符'));
-        }
-      }
-    ],
-    phone: [
-      {
-        pattern: phoneReg,
-        message: '手机号格式不正确',
-        type: 'string',
-        trigger: 'blur'
-      }
-    ]
-  });
 
   /** 保存编辑 */
   const save = () => {
@@ -173,11 +133,12 @@
         return;
       }
       loading.value = true;
-      const saveOrUpdate = isUpdate.value ? updateUser : addUser;
-      saveOrUpdate(form)
+      const saveOrUpdate = isUpdate.value ? updateCar : addCar;
+      saveOrUpdate({...form, remark2: userStore.userList.filter(i=>form.users == i.userId).map(i=>i.nickName).join(',')})
         .then((msg) => {
           loading.value = false;
           EleMessage.success(msg);
+          reloadTable?.();
           onClose();
         })
         .catch((e) => {
@@ -206,7 +167,7 @@
       if (props.data) {
         assignFields({
           ...props.data,
-          password: ''
+          users: Number(props.data.users)
         });
         isUpdate.value = true;
       } else {

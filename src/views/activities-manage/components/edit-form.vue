@@ -11,7 +11,7 @@
     @updateValue="setFieldValue"
   >
     <template #SelectUser>
-      <SelectUser v-model="form.user" multiple />
+      <SelectUser v-model="form.user" multiple @setUserList="setUserList"/>
     </template>
     <template #footer>
       <el-button @click="onClose">关闭</el-button>
@@ -24,7 +24,7 @@
 
 <script lang="ts" setup>
   import ProForm from '@/components/ProForm/index.vue';
-  import { ref, reactive, watch } from 'vue';
+  import { ref, reactive, watch, inject } from 'vue';
   // import { useRouter } from 'vue-router';
   import type { FormInstance, FormRules } from 'element-plus';
   import { EleMessage, emailReg, phoneReg } from '@hnjing/zxzy-admin-plus';
@@ -32,6 +32,9 @@
   // import { usePageTab } from '@/utils/use-page-tab';
   import SelectUser from '@/components/SelectUser/index.vue';
   import { addActivity, updateActivity } from '@/api/activity/index.js';
+
+  // 在 setup 顶层注入 reloadTable 函数
+  const reloadTable = inject<(where?: any) => void>('reloadTable');
 
   const props = defineProps<{
     /** 修改回显的数据 */
@@ -52,17 +55,23 @@
   /** 表单实例 */
   const formRef = ref<FormInstance | null>(null);
 
+  const userList = ref([])
+  const setUserList = (list) => {
+    userList.value = list;
+  }
+
   /** 表单数据 */
   const [form, resetFields, assignFields, setFieldValue] = useFormData(
     {
+      id: '',
       activityTitle: '',
       user: [],
       dateRange: [],
-      type: '',
+      activityType: '',
       activitySco: '',
-      date: [],
-      image: [],
-      remark: ''
+      activityAddress: '',
+      activityContent: '',
+      activityPicList: []
     },
     {
       immediate: true
@@ -94,7 +103,7 @@
     },
     {
       label: '活动类型',
-      prop: 'type',
+      prop: 'activityType',
       type: 'dictSelect',
       props: { code: 'sys_activity_type' },
       required: true
@@ -117,11 +126,12 @@
     },
     {
       label: '活动照片',
-      prop: 'activityPic',
+      prop: 'activityPicList',
       type: 'imageUpload',
       props: {
         limit: 5
-      }
+      },
+      required: true
     },
   ]);
 
@@ -135,19 +145,23 @@
         return;
       }
       loading.value = true;
-      debugger;
       const saveOrUpdate = isUpdate.value ? updateActivity : addActivity;
       const sendParams = {
         ...form,
         user: form.user.join(','),
+        activityPicList: form.activityPicList? JSON.parse(form.activityPicList) : [],
         activityStartTime: form.dateRange[0],
-        activityEndTime: form.dateRange[1]
+        activityEndTime: form.dateRange[1],
+        // 人员姓名
+        remark1: userList.value.filter(i=>form.user.includes(i.userId)).map(i=>i.nickName).join(',')
       };
       saveOrUpdate(sendParams)
         .then((msg) => {
           loading.value = false;
           EleMessage.success(msg);
           onClose();
+          // 调用注入的刷新表格函数
+          reloadTable?.();
         })
         .catch((e) => {
           loading.value = false;
@@ -171,10 +185,13 @@
 
   watch(
     () => props.editData,
-    () => {
+    (val) => {
       if (props.editData?.id) {
         assignFields({
-          ...props.editData
+          ...val,
+          user: val.user.split(',').map(i=>Number(i)),
+          dateRange: [val.activityStartTime, val.activityEndTime],
+          activityPicList: JSON.stringify(val.activityPicList)
         });
         isUpdate.value = true;
       } else {

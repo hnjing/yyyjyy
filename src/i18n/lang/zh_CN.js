@@ -10,7 +10,7 @@ export const zh_CN = {
       website: '官网',
       document: '文档',
       authorization: '授权',
-      copyright: 'Copyright © 2025 北京中兴正远科技有限公司'
+      copyright: 'Copyright © 2025 湖南益安应急救援中心'
     },
     logout: {
       title: '系统提示',

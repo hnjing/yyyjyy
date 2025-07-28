@@ -1,12 +1,12 @@
 <template>
   <div class="login-body">
-    <div class="switch-corner">
+    <!-- <div class="switch-corner">
       <img
         src="@/assets/login/loginType_2.png"
         class="switch-icon"
         @click="switchToUKey"
       />
-    </div>
+    </div> -->
     <el-text>账号登录</el-text>
     <div class="form-padding"></div>
 
@@ -81,7 +81,7 @@
           <el-checkbox v-model="form.remember" class="remember-check">
             <span class="remember-text">记住密码</span>
           </el-checkbox>
-          <span class="forget-password" @click="$emit('resetPassword')"
+          <span class="forget-password" @click="handleForgetPassword"
             >忘记密码</span
           >
         </div>
@@ -96,13 +96,13 @@
         >
           登录
         </el-button>
-        <div style="display: flex; justify-content: center; width: 100%">
+        <!-- <div style="display: flex; justify-content: center; width: 100%">
           <img
             src="@/assets/login/ukeyLogin.png"
             style="height: 48px; margin-top: 18px; cursor: pointer"
             @click="goUkeyLogin"
           />
-        </div>
+        </div> -->
       </el-form-item>
     </el-form>
   </div>
@@ -180,6 +180,10 @@
 
   const goUkeyLogin = () => {
     emit('switchTab', '2');
+  };
+
+  const handleForgetPassword = () => {
+    EleMessage.warning('请联系管理员重置密码');
   };
 
   /** 获取图形验证码 */

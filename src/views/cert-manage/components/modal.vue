@@ -33,8 +33,7 @@
     },
     /** 编辑数据 */
     editData: {
-      type: Object,
-      default: () => ({})
+      type: Object
     }
   });
 

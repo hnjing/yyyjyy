@@ -2,11 +2,11 @@
 <template>
   <ele-dropdown
     :items="[
-      {
-        title: t('layout.header.profile'),
-        command: 'profile',
-        icon: UserOutlined
-      },
+      // {
+      //   title: t('layout.header.profile'),
+      //   command: 'profile',
+      //   icon: UserOutlined
+      // },
       {
         title: t('layout.header.password'),
         command: 'password',

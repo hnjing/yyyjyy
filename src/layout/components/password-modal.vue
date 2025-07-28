@@ -129,8 +129,12 @@
       if (!valid) {
         return;
       }
+      let params = {
+        oldPassword: form.oldPassword,
+        newPassword: form.password
+      };
       loading.value = true;
-      updatePassword(form)
+      updatePassword(params)
         .then((msg) => {
           loading.value = false;
           EleMessage.success({ message: msg, plain: true });
