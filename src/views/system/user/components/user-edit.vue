@@ -135,8 +135,8 @@
           placeholder="请输入内容"
         />
       </el-form-item>
-      <el-form-item label="头像" prop='headurl'>
-        <ImageUpload v-model="form.headurl" :limit="1"/>
+      <el-form-item label="头像" prop="headurl">
+        <ImageUpload v-model="form.headurl" :limit="1" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -156,7 +156,7 @@
   import PostSelect from './post-select.vue';
   import DeptSelect from '../../dept/components/dept-select.vue';
   import { addUser, updateUser, getUser } from '@/api/system/user';
-  import ImageUpload from '@/components/ImageUpload/index.vue'
+  import ImageUpload from '@/components/ImageUpload/index.vue';
 
   const props = defineProps({
     /** 修改回显的数据 */
@@ -309,7 +309,6 @@
         assignFields({ ...props.data, password: '' });
         getUser(props.data.userId)
           .then((data) => {
-            debugger;
             assignFields({
               ...props.data,
               roleIds: data.roleIds,

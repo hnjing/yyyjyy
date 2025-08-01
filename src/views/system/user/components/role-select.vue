@@ -38,7 +38,7 @@
   /** 获取角色数据 */
   listRoles()
     .then((list) => {
-      data.value = list;
+      data.value = list.filter((item) => item.roleId !== 1);
     })
     .catch((e) => {
       EleMessage.error({ message: e.message, plain: true });

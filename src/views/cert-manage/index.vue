@@ -32,7 +32,7 @@
               type="primary"
               :icon="PlusOutlined"
               class="ele-btn-icon"
-              v-permission="'cert:add'"
+              v-permission="'certificate:add'"
               @click="openEdit()"
             >
               新增证书
@@ -70,6 +70,7 @@
             :teleported="true"
             :initial-index="1000"
             fit="cover"
+            lazy
           />
         </template>
         <!-- 操作列 -->
@@ -77,16 +78,19 @@
           <el-link
             type="primary"
             underline="never"
-            v-permission="'cert:update'"
+            v-permission="'certificate:edit'"
             @click.stop="openEdit(row)"
           >
             修改
           </el-link>
-          <el-divider direction="vertical" v-permission="'cert:delete'" />
+          <el-divider
+            direction="vertical"
+            v-permission="'certificate:remove'"
+          />
           <el-link
             type="danger"
             underline="never"
-            v-permission="'cert:delete'"
+            v-permission="'certificate:remove'"
             @click.stop="remove(row)"
           >
             删除
@@ -297,10 +301,6 @@
 
   /** 修改搜索框背景色 */
   const tableBorder = ref(false);
-
-  const openDetail = (row) => {
-    console.log(row);
-  };
 
   /** 编辑 */
   const openEdit = (row) => {

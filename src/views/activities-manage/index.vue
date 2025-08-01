@@ -69,6 +69,7 @@
             :preview-teleported="true"
             :teleported="true"
             :initial-index="1000"
+            lazy
             fit="cover"
           />
         </template>
@@ -77,16 +78,16 @@
           <el-link
             type="primary"
             underline="never"
-            v-permission="'activity:update'"
+            v-permission="'activity:edit'"
             @click.stop="openEdit(row)"
           >
             修改
           </el-link>
-          <el-divider v-permission="'activity:delete'" direction="vertical" />
+          <el-divider v-permission="'activity:remove'" direction="vertical" />
           <el-link
             type="danger"
             underline="never"
-            v-permission="'activity:delete'"
+            v-permission="'activity:remove'"
             @click.stop="remove(row)"
           >
             删除

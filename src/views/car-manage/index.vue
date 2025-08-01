@@ -71,6 +71,7 @@
             :teleported="true"
             :initial-index="1000"
             fit="cover"
+            lazy
           />
         </template>
         <!-- 操作列 -->
@@ -85,18 +86,18 @@
           <el-divider direction="vertical" /> -->
           <el-link
             type="primary"
-            v-permission="'car:update'"
+            v-permission="'car:edit'"
             underline="never"
             @click.stop="openEdit(row)"
           >
             修改
           </el-link>
-          <el-divider direction="vertical" v-permission="'car:delete'" />
+          <el-divider direction="vertical" v-permission="'car:remove'" />
           <el-link
             type="danger"
             underline="never"
             @click.stop="remove(row)"
-            v-permission="'car:delete'"
+            v-permission="'car:remove'"
           >
             删除
           </el-link>

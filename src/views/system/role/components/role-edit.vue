@@ -282,7 +282,6 @@
     menuLoading.value = true;
     listRoleMenus(props.data?.roleId)
       .then((result) => {
-        debugger;
         menuLoading.value = false;
         menuData.value = result.menus;
         const cks = [];
