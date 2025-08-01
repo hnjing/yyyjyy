@@ -31,6 +31,7 @@
             <el-button
               type="primary"
               :icon="PlusOutlined"
+              v-permission="'activity:add'"
               class="ele-btn-icon"
               @click="openEdit()"
             >
@@ -73,11 +74,21 @@
         </template>
         <!-- 操作列 -->
         <template #action="{ row }">
-          <el-link type="primary" underline="never" @click.stop="openEdit(row)">
+          <el-link
+            type="primary"
+            underline="never"
+            v-permission="'activity:update'"
+            @click.stop="openEdit(row)"
+          >
             修改
           </el-link>
-          <el-divider direction="vertical" />
-          <el-link type="danger" underline="never" @click.stop="remove(row)">
+          <el-divider v-permission="'activity:delete'" direction="vertical" />
+          <el-link
+            type="danger"
+            underline="never"
+            v-permission="'activity:delete'"
+            @click.stop="remove(row)"
+          >
             删除
           </el-link>
         </template>
@@ -189,7 +200,12 @@
         columnKey: 'activityType',
         label: '活动类型',
         minWidth: 110,
-        formatter: (row) => (typeDicts.value.filter(i=>String(i.dictValue) === row.activityType)[0] || {}).dictLabel
+        formatter: (row) =>
+          (
+            typeDicts.value.filter(
+              (i) => String(i.dictValue) === row.activityType
+            )[0] || {}
+          ).dictLabel
       },
       {
         prop: 'activitySco',
@@ -305,10 +321,14 @@
 
   /** 删除 */
   const remove = (row) => {
-    ElMessageBox.confirm(`确定要删除“${row.activityTitle}”的活动吗?`, '系统提示', {
-      type: 'warning',
-      draggable: true
-    })
+    ElMessageBox.confirm(
+      `确定要删除“${row.activityTitle}”的活动吗?`,
+      '系统提示',
+      {
+        type: 'warning',
+        draggable: true
+      }
+    )
       .then(() => {
         removeActivity(row.id)
           .then((msg) => {

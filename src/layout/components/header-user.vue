@@ -29,7 +29,7 @@
     <div class="header-avatar">
       <el-avatar
         :size="28"
-        :src="loginUser.avatar"
+        :src="loginUser.headurl"
         :icon="loginUser.avatar ? void 0 : UserOutlined"
         style="transform: translateY(-1px)"
       />
@@ -37,7 +37,7 @@
         class="hidden-sm-and-down"
         style="margin-left: 4px; line-height: 1.5"
       >
-        {{ loginUser.nickname }}
+        {{ loginUser.nickName }}
       </div>
       <el-icon :size="13" style="margin: 0 -4px 0 2px">
         <ArrowDown />

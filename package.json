@@ -9,6 +9,7 @@
     "build": "vite build",
     "serve:staging": "vite build --mode staging && vite preview --host",
     "build:staging": "vite build --mode staging",
+    "build:prod": "vite build --mode production",
     "lint:eslint": "eslint --cache --max-warnings 0  \"src/**/*.{vue,js}\" --fix",
     "clean:cache": "rimraf node_modules/.cache/ && rimraf node_modules/.vite/",
     "clean:lib": "rimraf node_modules"

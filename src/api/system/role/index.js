@@ -110,7 +110,7 @@ export async function listRoleMenus(id) {
   }
   const res = await request.get('/system/menu/roleMenuTreeselect/' + id);
   if (res.data.code === 200) {
-    return res.data.data;
+    return res.data;
   }
   return Promise.reject(new Error(res.data.msg));
 }
@@ -121,7 +121,7 @@ export async function listRoleMenus(id) {
 export async function listDataScope(id) {
   const res = await request.get('/system/role/deptTree/' + id);
   if (res.data.code === 200) {
-    return res.data.data;
+    return res.data;
   }
   return Promise.reject(new Error(res.data.msg));
 }

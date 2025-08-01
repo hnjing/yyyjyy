@@ -200,11 +200,12 @@
   const showEdit = ref(false);
 
   /** 表格数据源 */
-  const datasource: DatasourceFunction = ({ pages, where, orders }) => {
+  const datasource: DatasourceFunction = ({ pages, where, orders, filters }) => {
     return pageUsers({
       ...where,
       ...orders,
       ...pages,
+      ...filters,
       organizationId: props.organizationId
     });
   };

@@ -25,7 +25,7 @@
           :type="index < 3 ? 'success' : 'info'"
           :disable-transitions="true"
         >
-          {{ item.ranking }}
+          {{ item.ranking ? item.ranking : '0' }}
         </el-tag>
       </div>
     </div>

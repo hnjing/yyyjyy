@@ -32,6 +32,7 @@
               type="primary"
               :icon="PlusOutlined"
               class="ele-btn-icon"
+              v-permission="'cert:add'"
               @click="openEdit()"
             >
               新增证书
@@ -73,11 +74,21 @@
         </template>
         <!-- 操作列 -->
         <template #action="{ row }">
-          <el-link type="primary" underline="never" @click.stop="openEdit(row)">
+          <el-link
+            type="primary"
+            underline="never"
+            v-permission="'cert:update'"
+            @click.stop="openEdit(row)"
+          >
             修改
           </el-link>
-          <el-divider direction="vertical" />
-          <el-link type="danger" underline="never" @click.stop="remove(row)">
+          <el-divider direction="vertical" v-permission="'cert:delete'" />
+          <el-link
+            type="danger"
+            underline="never"
+            v-permission="'cert:delete'"
+            @click.stop="remove(row)"
+          >
             删除
           </el-link>
         </template>
@@ -108,7 +119,11 @@
   import { EleMessage } from '@hnjing/zxzy-admin-plus';
   import { PlusOutlined } from '@/components/icons';
   import { useDictData } from '@/utils/use-dict-data';
-  import { pageCertificates, exportCertificates, removeCertificate } from '@/api/certificate';
+  import {
+    pageCertificates,
+    exportCertificates,
+    removeCertificate
+  } from '@/api/certificate';
   import handleModal from './components/modal.vue';
   import SelectUser from '@/components/SelectUser/index.vue';
 
@@ -202,7 +217,12 @@
         columnKey: 'certificateType',
         label: '证书类型',
         minWidth: 110,
-        formatter: (row) => (typeDicts.value.filter(i=>String(i.dictValue) === row.certificateType)[0] || {}).dictLabel
+        formatter: (row) =>
+          (
+            typeDicts.value.filter(
+              (i) => String(i.dictValue) === row.certificateType
+            )[0] || {}
+          ).dictLabel
       },
       {
         prop: 'certificateTime',

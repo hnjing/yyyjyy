@@ -16,7 +16,7 @@
         :image-settings="image"
         :tag="tag"
       />
-      <div>{{ text }}</div>
+      <!-- <div>{{ text }}</div> -->
     </div>
     <template #footer>
       <el-button type="primary" @click="handleCancel">完成</el-button>

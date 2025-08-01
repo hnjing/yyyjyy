@@ -32,6 +32,7 @@
               type="primary"
               :icon="PlusOutlined"
               class="ele-btn-icon"
+              v-permission="'car:add'"
               @click="openEdit()"
             >
               新增关联
@@ -72,17 +73,6 @@
             fit="cover"
           />
         </template>
-        <!-- 状态列 -->
-        <template #status="{ row }">
-          <ele-dot v-if="row.status === 0" text="正常" size="8px" />
-          <ele-dot
-            v-else-if="row.status === 1"
-            text="停用"
-            type="danger"
-            :ripple="false"
-            size="8px"
-          />
-        </template>
         <!-- 操作列 -->
         <template #action="{ row }">
           <!-- <el-link
@@ -93,11 +83,21 @@
             查看
           </el-link>
           <el-divider direction="vertical" /> -->
-          <el-link type="primary" underline="never" @click.stop="openEdit(row)">
+          <el-link
+            type="primary"
+            v-permission="'car:update'"
+            underline="never"
+            @click.stop="openEdit(row)"
+          >
             修改
           </el-link>
-          <el-divider direction="vertical" />
-          <el-link type="danger" underline="never" @click.stop="remove(row)">
+          <el-divider direction="vertical" v-permission="'car:delete'" />
+          <el-link
+            type="danger"
+            underline="never"
+            @click.stop="remove(row)"
+            v-permission="'car:delete'"
+          >
             删除
           </el-link>
         </template>
@@ -213,7 +213,12 @@
         columnKey: 'carType',
         label: '车辆类型',
         minWidth: 110,
-        formatter: (row) => (typeDicts.value.filter(i=>String(i.dictValue) === row.carType)[0] || {}).dictLabel
+        formatter: (row) =>
+          (
+            typeDicts.value.filter(
+              (i) => String(i.dictValue) === row.carType
+            )[0] || {}
+          ).dictLabel
       },
       {
         prop: 'mobile',
@@ -302,10 +307,14 @@
 
   /** 删除 */
   const remove = (row) => {
-    ElMessageBox.confirm(`确定要删除救援车牌号：“${row.aidCarNo}”的绑定吗?`, '系统提示', {
-      type: 'warning',
-      draggable: true
-    })
+    ElMessageBox.confirm(
+      `确定要删除救援车牌号：“${row.aidCarNo}”的绑定吗?`,
+      '系统提示',
+      {
+        type: 'warning',
+        draggable: true
+      }
+    )
       .then(() => {
         removeCar(row.id)
           .then((msg) => {
@@ -324,7 +333,7 @@
     reload(lastWhere);
   };
 
-   /** 孙子组件刷新表格 */
+  /** 孙子组件刷新表格 */
   provide('reloadTable', reload);
 
   /** 导出和打印全部数据的数据源 */

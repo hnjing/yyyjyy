@@ -271,8 +271,14 @@
   });
 
   /** 表格数据源 */
-  const datasource = ({ pages, where, filters }) => {
-    return pageUsers({ ...where, ...filters, ...pages, deptId: props.deptId });
+  const datasource = ({ pages, where, filters, orders }) => {
+    return pageUsers({
+      ...where,
+      ...filters,
+      ...pages,
+      ...orders,
+      deptId: props.deptId
+    });
   };
 
   /** 搜索 */
