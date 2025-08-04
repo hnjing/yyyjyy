@@ -58,10 +58,15 @@
     </template>
     <template #action="{ row }">
       <template v-if="row.userId !== 1">
-        <el-link type="primary" underline="never" @click="openCode(row)">
+        <el-link
+          type="primary"
+          underline="never"
+          v-permission="'system:user:edit'"
+          @click="openCode(row)"
+        >
           生成二维码
         </el-link>
-        <el-divider direction="vertical" />
+        <el-divider direction="vertical" v-permission="'system:user:edit'" />
         <el-link
           type="primary"
           underline="never"
@@ -234,6 +239,7 @@
         width: 280,
         align: 'center',
         slot: 'action',
+        fixed: 'right',
         hideInPrint: true,
         hideInExport: true
       }

@@ -254,7 +254,14 @@
     helpno: '',
     contactpeople: '',
     contactmobile: '',
-    headurl: ''
+    headurl: '',
+    politics: null,
+    isVeteran: '0',
+    isBuyInsurance: null,
+    job: '',
+    passport: '',
+    jobaddress: '',
+    medicalHistory: ''
   });
 
   /** 表单验证规则 */
