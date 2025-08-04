@@ -7,7 +7,7 @@
     :rules="rules"
     :items="items"
     :footer="true"
-    :label-width="100"
+    :label-width="120"
     :grid="{ span: 24 }"
     @updateValue="setFieldValue"
   >
@@ -104,15 +104,6 @@
       type: 'input'
     },
     {
-      label: '车辆照片',
-      prop: 'carPic',
-      type: 'imageUpload',
-      props: {
-        limit: 1
-      },
-      required: true
-    },
-    {
       label: '绑定时间',
       prop: 'bindTime',
       type: 'date',
@@ -122,6 +113,36 @@
       label: '备注',
       prop: 'remark1',
       type: 'textarea'
+    },
+    {
+      label: '车辆照片-前面',
+      prop: 'carPic',
+      type: 'imageUpload',
+      props: {
+        limit: 1
+      },
+      colProps: { span: 8 },
+      required: true
+    },
+    {
+      label: '车辆照片-侧面',
+      prop: 'remark2',
+      type: 'imageUpload',
+      props: {
+        limit: 1
+      },
+      colProps: { span: 8 },
+      required: true
+    },
+    {
+      label: '车辆照片-后面',
+      prop: 'remark2',
+      type: 'imageUpload',
+      props: {
+        limit: 1
+      },
+      colProps: { span: 8 },
+      required: true
     }
   ]);
 

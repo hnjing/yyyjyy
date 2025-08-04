@@ -387,7 +387,7 @@
     }
 
     .login-captcha {
-      height: 40px;
+      height: 50px;
       background-image: linear-gradient(to right, #c1c1c1, #fafafa);
       border-radius: 5px;
       cursor: pointer;

@@ -3,7 +3,7 @@
   <ele-modal
     :form="true"
     :destroy-on-close="true"
-    :width="840"
+    :width="1240"
     v-model="visible"
     :title="isUpdate ? '修改用户' : '新建用户'"
   >
@@ -15,7 +15,7 @@
       @submit.prevent=""
     >
       <el-row :gutter="16">
-        <el-col :sm="12" :xs="24">
+        <el-col :sm="8" :xs="24">
           <el-form-item label="姓名" prop="nickName">
             <el-input
               clearable
@@ -59,14 +59,6 @@
               placeholder="请输入用户身份证号"
             />
           </el-form-item>
-          <el-form-item label="紧急联系人" prop="contactpeople">
-            <el-input
-              clearable
-              :maxlength="30"
-              v-model="form.contactpeople"
-              placeholder="请输入紧急联系人"
-            />
-          </el-form-item>
           <el-form-item label="救援编号" prop="helpno">
             <el-input
               clearable
@@ -75,8 +67,11 @@
               placeholder="请输入救援编号如：SOS-2025-001"
             />
           </el-form-item>
+          <el-form-item label="头像" prop="headurl" required>
+            <ImageUpload v-model="form.headurl" :limit="1" />
+          </el-form-item>
         </el-col>
-        <el-col :sm="12" :xs="24">
+        <el-col :sm="8" :xs="24">
           <el-form-item label="归属部门">
             <dept-select v-model="form.deptId" />
           </el-form-item>
@@ -116,6 +111,14 @@
               v-model="form.blood"
             />
           </el-form-item>
+          <el-form-item label="紧急联系人" prop="contactpeople">
+            <el-input
+              clearable
+              :maxlength="30"
+              v-model="form.contactpeople"
+              placeholder="请输入紧急联系人"
+            />
+          </el-form-item>
           <el-form-item label="紧急联系电话" prop="contactmobile">
             <el-input
               clearable
@@ -124,20 +127,73 @@
               placeholder="请输入紧急联系电话"
             />
           </el-form-item>
+          <el-form-item label="备注">
+            <el-input
+              type="textarea"
+              :rows="3"
+              v-model="form.remark"
+              placeholder="请输入内容"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :sm="8" :xs="24">
+          <el-form-item label="政治面貌" prop="politics">
+            <dict-data
+              code="sys_user_politics"
+              v-model="form.politics"
+              placeholder="请选择政治面貌"
+            />
+          </el-form-item>
+          <el-form-item label="是否退伍军人" prop="isVeteran">
+            <dict-data
+              code="sys_yes_no"
+              type="radio"
+              v-model="form.isVeteran"
+            />
+          </el-form-item>
+          <el-form-item label="是否购买保险" prop="isBuyInsurance">
+            <dict-data
+              code="sys_yes_no"
+              type="radio"
+              v-model="form.isBuyInsurance"
+            />
+          </el-form-item>
+          <el-form-item label="职业" prop="job">
+            <el-input
+              clearable
+              :maxlength="20"
+              v-model="form.job"
+              placeholder="请输入所属职业"
+            />
+          </el-form-item>
+          <el-form-item label="护照" prop="passport">
+            <el-input
+              clearable
+              :maxlength="100"
+              v-model="form.passport"
+              placeholder="请输入护照"
+            />
+          </el-form-item>
+          <el-form-item label="工作单位" prop="jobaddress">
+            <el-input
+              clearable
+              :maxlength="100"
+              v-model="form.jobaddress"
+              placeholder="请输入工作单位"
+            />
+          </el-form-item>
+          <el-form-item label="重大医疗史" prop="medicalHistory">
+            <el-input
+              clearable
+              :maxlength="11"
+              type="textarea"
+              :rows="3"
+              v-model="form.medicalHistory"
+              placeholder="请输入重大医疗史"
+            />
+          </el-form-item>
         </el-col>
       </el-row>
-
-      <el-form-item label="备注">
-        <el-input
-          type="textarea"
-          :rows="3"
-          v-model="form.remark"
-          placeholder="请输入内容"
-        />
-      </el-form-item>
-      <el-form-item label="头像" prop="headurl">
-        <ImageUpload v-model="form.headurl" :limit="1" />
-      </el-form-item>
     </el-form>
     <template #footer>
       <el-button @click="handleCancel">取消</el-button>

@@ -24,7 +24,7 @@
                 marginBottom: '8px'
               }"
               style="max-width: 652px"
-              @click="openImageViewer"
+              @click="openImageViewer(item.images)"
             >
               <template #item="{ item }">
                 <img
@@ -38,7 +38,6 @@
                 />
               </template>
             </ele-check-card>
-            <EleImageViewer v-model="showImageViewer" :urlList="item.images" />
           </div>
           <div>
             <el-tag
@@ -53,6 +52,7 @@
           </div>
         </el-timeline-item>
       </el-timeline>
+      <EleImageViewer v-model="showImageViewer" :urlList="images" />
     </el-scrollbar>
     <el-button
       class="more-btn"
@@ -66,7 +66,7 @@
 </template>
 
 <script setup>
-  import { ref, computed } from 'vue';
+  import { ref, reactive } from 'vue';
   import MoreIcon from './more-icon.vue';
   import { useRouter } from 'vue-router';
 
@@ -89,8 +89,10 @@
   };
 
   /** 打开图片预览组件 */
-  const openImageViewer = () => {
+  const images = ref([]);
+  const openImageViewer = (img) => {
     showImageViewer.value = true;
+    images.value = img;
   };
 
   const handleCommand = (command) => {

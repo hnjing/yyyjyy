@@ -2,7 +2,7 @@
   <div>
     <ele-modal
       form
-      :width="600"
+      :width="800"
       :title="`${props.handle === 'add' ? '新增' : '编辑'}车辆关联`"
       v-model="visible"
       :move-out="moveOut"

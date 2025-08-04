@@ -2,7 +2,7 @@
 <template>
   <ele-card
     :header="title"
-    :body-style="{ padding: '8px 0px', height: '370px' }"
+    :body-style="{ padding: '8px 0px', height: '370px', overflow: 'auto' }"
   >
     <template #extra>
       <more-icon @command="handleCommand" />

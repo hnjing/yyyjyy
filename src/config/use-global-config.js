@@ -12,6 +12,10 @@ export function useGlobalConfig() {
       dataName: 'rows',
       countName: 'total'
     },
+    request: {
+      pageName: 'pageNum',
+      limitName: 'pageSize'
+    },
     tools: ['reload', 'export', 'print', 'size', 'columns', 'maximized'],
     exportConfig: {
       // 使用 exceljs 进行导出

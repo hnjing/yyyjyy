@@ -9,7 +9,10 @@ import request from '@/utils/request';
 export async function uploadFile(file, config, fileName) {
   const formData = new FormData();
   formData.append('file', file, fileName);
-  const res = await request.post('/common/upload', formData, config);
+  const res = await request.post('/common/upload', formData, {
+    ...config,
+    headers: { repeatSubmit: false }
+  });
   if (res.data.code === 200) {
     return res.data;
   }
