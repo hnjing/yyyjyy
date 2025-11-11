@@ -126,7 +126,7 @@
     },
     {
       label: '车辆照片-侧面',
-      prop: 'remark2',
+      prop: 'remark3',
       type: 'imageUpload',
       props: {
         limit: 1
@@ -136,7 +136,7 @@
     },
     {
       label: '车辆照片-后面',
-      prop: 'remark2',
+      prop: 'remark4',
       type: 'imageUpload',
       props: {
         limit: 1

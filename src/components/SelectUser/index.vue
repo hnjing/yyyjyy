@@ -27,10 +27,10 @@
 
   const user = defineModel('modelValue', { type: Number });
   const userList = ref([]);
-  const emit = defineEmits('setUserList')
+  const emit = defineEmits('setUserList');
 
   // 获取人员列表
-  pageUsers({ page: 1, limit: 1000 }).then((res) => {
+  pageUsers({ pageNum: 1, pageSize: 10000 }).then((res) => {
     list.value = res.rows;
     userList.value = res.rows;
     userStore.setUserList(res.rows);

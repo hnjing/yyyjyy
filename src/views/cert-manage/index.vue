@@ -17,7 +17,7 @@
         @reset="onSearch"
       >
         <template #SelectUser>
-          <SelectUser v-model="form.certificateUser" />
+          <SelectUser v-model="form.certificateUser" :disabled="!isAdmin" />
         </template>
         <template #toolbar>
           <ele-tooltip
@@ -58,6 +58,7 @@
         :default-sort="{ prop: 'createTime', order: 'ascending' }"
         :footer-style="{ paddingBottom: '12px' }"
         style="padding-bottom: 0; margin-top: -5px"
+        :loadOnCreated="false"
         @done="onDone"
       >
         <template #image="{ row }">
@@ -118,7 +119,7 @@
 </template>
 
 <script setup name="CertManage">
-  import { ref, reactive, computed, nextTick, provide } from 'vue';
+  import { ref, reactive, computed, nextTick, provide, onMounted } from 'vue';
   import { ElMessageBox } from 'element-plus/es';
   import { EleMessage } from '@hnjing/zxzy-admin-plus';
   import { PlusOutlined } from '@/components/icons';
@@ -130,18 +131,23 @@
   } from '@/api/certificate';
   import handleModal from './components/modal.vue';
   import SelectUser from '@/components/SelectUser/index.vue';
+  import { useUserStore } from '@/store/modules/user';
 
   /** 性别字典数据 */
   const [typeDicts] = useDictData(['sys_certificate_type']);
+  const userStore = useUserStore();
+  const { roles, info } = userStore;
+  const isAdmin = roles.includes('admin') || roles.includes('GLY');
 
   /** 表格实例 */
   const tableRef = ref(null);
 
   /** 表单数据 */
   const form = reactive({
-    carNo: '',
-    aidCarNo: '',
-    useName: ''
+    certificateUser: isAdmin ? '' : info.userId,
+    certificate: '',
+    certificateNo: '',
+    certificateType: ''
   });
 
   /** 更新表单数据 */
@@ -155,7 +161,8 @@
     {
       type: 'SelectUser',
       label: '获证人员',
-      prop: 'certificateUser'
+      prop: 'certificateUser',
+      vIf: isAdmin
     },
     {
       type: 'input',
@@ -285,12 +292,7 @@
 
   /** 搜索事件 */
   const onSearch = (where) => {
-    const [d1, d2] = where.createTime ?? [];
-    const time = {
-      createTimeStart: d1 ? `${d1} 00:00:00` : '',
-      createTimeEnd: d2 ? `${d2} 23:59:59` : ''
-    };
-    Object.assign(lastWhere, where, time);
+    Object.assign(lastWhere, where);
     doReload();
   };
 
@@ -340,4 +342,8 @@
   const exportSource = ({ where, orders, filters }) => {
     return exportCertificates({ ...where, ...orders, ...filters });
   };
+
+  onMounted(() => {
+    onSearch(form);
+  });
 </script>

@@ -19,7 +19,7 @@
           :body-style="{ padding: 0 }"
           style="margin-top: 16px; overflow: hidden; cursor: pointer"
         >
-          <img :src="item.cover" style="width: 100%" />
+          <img :src="item.cover" style="width: 100%; max-height: 300px" />
           <div style="padding: 14px 24px 24px 24px">
             <ele-text size="md" style="max-height: 100%">
               {{ item.title }}

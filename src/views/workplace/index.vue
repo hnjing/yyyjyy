@@ -273,20 +273,22 @@
             roleName: i.roleName
           };
         }),
-        certificateList: res.certificateList.map((i) => {
-          return {
-            id: i.id,
-            title: i.certificate,
-            cover: JSON.parse(i.certificatePic)[0],
-            typeName: (
-              certTypeDicts.value.filter(
-                (item) => String(item.dictValue) === i.certificateType
-              )[0] || {}
-            ).dictLabel,
-            gainTime: i.certificateTime,
-            name: i.remark1
-          };
-        }),
+        certificateList: res.certificateList
+          .map((i) => {
+            return {
+              id: i.id,
+              title: i.certificate,
+              cover: JSON.parse(i.certificatePic)[0],
+              typeName: (
+                certTypeDicts.value.filter(
+                  (item) => String(item.dictValue) === i.certificateType
+                )[0] || {}
+              ).dictLabel,
+              gainTime: i.certificateTime,
+              name: i.remark1
+            };
+          })
+          ?.slice(0, 8),
         experience: res.activityList.map((i) => {
           return {
             title: i.activityTitle,

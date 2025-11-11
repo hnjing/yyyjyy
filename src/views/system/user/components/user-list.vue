@@ -114,6 +114,8 @@
   <user-role v-model="showRole" :data="current" />
   <!-- 二维码 -->
   <user-code v-model="showCode" :data="current" />
+  <!-- 打印证书 -->
+  <user-print v-model="showPrint" :data="current" />
 </template>
 
 <script setup>
@@ -134,6 +136,7 @@
   import UserImport from './user-import.vue';
   import UserRole from './user-role.vue';
   import UserCode from './user-code.vue';
+  import UserPrint from './user-print.vue';
   import {
     pageUsers,
     removeUsers,
@@ -264,6 +267,8 @@
   /** 是否显示二维码 */
   const showCode = ref(false);
 
+  const showPrint = ref(false);
+
   /** 操作列更多下拉菜单 */
   const moreItems = computed(() => {
     const items = [];
@@ -272,6 +277,9 @@
     }
     if (hasPermission('system:user:edit')) {
       items.push({ title: '分配角色', command: 'role' });
+    }
+    if (hasPermission('system:user:print')) {
+      items.push({ title: '打印证书', command: 'print' });
     }
     return items;
   });
@@ -307,6 +315,12 @@
   const openCode = (row) => {
     current.value = row ?? null;
     showCode.value = true;
+  };
+
+  /** 打印证书 */
+  const openPrint = (row) => {
+    current.value = row ?? null;
+    showPrint.value = true;
   };
 
   /** 批量删除 */
@@ -375,6 +389,8 @@
     } else if (key === 'role') {
       current.value = row ?? null;
       showRole.value = true;
+    } else if (key === 'print') {
+      openPrint(row);
     }
   };
 

@@ -315,7 +315,7 @@
           department: sysUser?.dept?.deptName,
           posts: sysUser?.postName,
           sex: sysUser.sex,
-          bloodTypeName: sysUser.blood,
+          bloodType: sysUser.blood,
           phone: sysUser.phonenumber,
           rescueNumber: sysUser.helpno,
           department: sysUser.dept?.deptName,
@@ -339,7 +339,7 @@
           })
         }
         // 需要设置的元素
-        const setContentList = ['posts', 'department', 'name', 'sexAgeBlood', 'profileId', 'profileDept', 'phone', 'contactEmergency', 'carInfoList', 'honorCertificate', 'experienceList']
+        const setContentList = ['posts', 'sex', 'bloodType', 'department', 'name', 'sexAgeBlood', 'profileId', 'profileDept', 'phone', 'contactEmergency', 'carInfoList', 'honorCertificate', 'experienceList']
         setContentList.forEach(item => {
           const element = document.querySelector(`#${item}`);
           if (element) {

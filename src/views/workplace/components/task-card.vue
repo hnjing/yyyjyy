@@ -17,10 +17,10 @@
       >
         <thead style="position: sticky; top: 0; z-index: 2">
           <tr>
-            <th
+            <!-- <th
               style="position: sticky; left: 0; z-index: 1; width: 38px"
               class="task-table-index"
-            ></th>
+            ></th> -->
             <th style="text-align: center; width: 88px">排名</th>
             <th>姓名</th>
             <th>救援次数</th>
@@ -37,7 +37,7 @@
         >
           <template #item="{ element }">
             <tr>
-              <td
+              <!-- <td
                 :style="{
                   textAlign: 'center',
                   paddingLeft: 0,
@@ -55,7 +55,7 @@
                   type="placeholder"
                   class="sort-handle"
                 />
-              </td>
+              </td> -->
               <td style="text-align: center; width: 78px">
                 <el-tag
                   v-if="element.ranking === 1"
