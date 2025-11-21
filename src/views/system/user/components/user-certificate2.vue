@@ -2,11 +2,8 @@
 <template>
   <div class="certificate-collection">
     <!-- 第一张：样式参考图片，大头像、姓名、应急救援、证号 -->
-    <div class="certificate-page back-page" :class="pageClass">
+    <div class="certificate-page" :class="pageClass">
       <div class="certificate-content first-card">
-        <div class="header">
-          <h2>救 援 证</h2>
-        </div>
         <div class="first-photo">
           <img
             :src="userInfo.headurl"
@@ -18,114 +15,117 @@
         </div>
         <div class="first-body">
           <h2 class="first-name">{{ userInfo.nickName }}</h2>
-          <p class="first-role">益安救援</p>
-          <!-- <p class="first-no">{{ userInfo.helpno }}</p> -->
+          <p class="first-role">应急救援</p>
+          <p class="first-no">{{ userInfo.helpno }}</p>
         </div>
 
-        <div class="back-qr-row">
-          <div class="back-qr">
-            <ele-qr-code
-              value="http://www.yiansos.com/"
-              :size="50"
-              level="L"
-              :margin="0"
-              :tag="tag"
-            />
-            <p class="qr-text">益安官网</p>
+        <!-- 第一张不再显示二维码（二维码已移动到第三张） -->
+      </div>
+    </div>
+
+    <!-- 第二张：详细信息，但不显示头像 -->
+    <div class="certificate-page" :class="pageClass">
+      <div class="certificate-content second-card">
+        <div class="header">
+          <h2>益安应急救援证</h2>
+          <p>Yi An Emergency Rescue</p>
+        </div>
+
+        <div class="info-grid no-photo">
+          <div class="info-item">
+            <span class="label">姓名:</span>
+            <span class="value">{{ userInfo.nickName }}</span>
           </div>
-          <div class="back-qr">
-            <!-- 从第一张移动过来的证书二维码（替换公众号） -->
-            <ele-qr-code
-              :value="text"
-              :size="50"
-              level="L"
-              :margin="0"
-              :tag="tag"
-            />
-            <p class="qr-text">个人信息</p>
+          <div class="info-item">
+            <span class="label">性别:</span>
+            <span class="value">{{ userInfo.sex }}</span>
           </div>
+          <div class="info-item">
+            <span class="label">血型:</span>
+            <span class="value">{{ userInfo.blood }}</span>
+          </div>
+          <div class="info-item idcard">
+            <span class="label">身份证号:</span>
+            <span class="value idcard-value">{{ userInfo.idcard }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">联系电话:</span>
+            <span class="value">{{ userInfo.phonenumber }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">紧急联系人:</span>
+            <span class="value">{{ userInfo.contactpeople }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">紧急电话:</span>
+            <span class="value">{{ userInfo.contactmobile }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">所属部门:</span>
+            <span class="value">{{ userInfo.dept?.deptName || '未知' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">职务:</span>
+            <span class="value">{{ userInfo.postName || '队员' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">有效期限:</span>
+            <span class="value">{{ validPeriod }}</span>
+          </div>
+        </div>
+
+        <!-- 第二张不显示二维码（已移至第三张） -->
+        <div class="second-footer">
+          <p>湖南益安应急救援服务有限公司监制</p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 第二张：详细信息，但不显示头像 -->
-  <!-- <div class="certificate-page" :class="pageClass">
-    <div class="certificate-content second-card">
-      <div class="header">
-        <h2>益安应急救援证</h2>
-        <p>Yi An Emergency Rescue</p>
-      </div>
+    <!-- 第三张：反面公司信息 + 二维码 -->
+    <div class="certificate-page back-page" :class="pageClass">
+      <div class="certificate-content">
+        <div class="header">
+          <h2>益安应急救援证</h2>
+          <p>Yi An Emergency Rescue</p>
+        </div>
 
-      <div class="info-grid no-photo">
-        <div class="info-item">
-          <span class="label">姓名:</span>
-          <span class="value">{{ userInfo.nickName }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">性别:</span>
-          <span class="value">{{ userInfo.sex }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">血型:</span>
-          <span class="value">{{ userInfo.blood }}</span>
-        </div>
-        <div class="info-item idcard">
-          <span class="label">身份证号:</span>
-          <span class="value idcard-value">{{ userInfo.idcard }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">联系电话:</span>
-          <span class="value">{{ userInfo.phonenumber }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">紧急联系人:</span>
-          <span class="value">{{ userInfo.contactpeople }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">紧急电话:</span>
-          <span class="value">{{ userInfo.contactmobile }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">所属部门:</span>
-          <span class="value">{{ userInfo.dept?.deptName || '未知' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">职务:</span>
-          <span class="value">{{ userInfo.postName || '队员' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">有效期限:</span>
-          <span class="value">{{ validPeriod }}</span>
-        </div>
-      </div>
-
-      <div class="second-footer">
-        <p>湖南益安应急救援服务有限公司监制</p>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- 第三张：反面公司信息 + 二维码 -->
-  <div class="certificate-page back-page" :class="pageClass">
-    <div class="certificate-content">
-      <div class="header">
-        <h2>中华人民共和国</h2>
-        <p>The People's Republic of China</p>
-      </div>
-
-      <div class="back-content">
-        <!-- <p><strong>中文名称：</strong>益安应急救援服务有限公司</p>
+        <div class="back-content">
+          <p><strong>中文名称：</strong>益安应急救援服务有限公司</p>
           <p><strong>英文简称：</strong>YASOS</p>
           <p><strong>所在国家：</strong>中国</p>
           <p><strong>主要职责：</strong>人道救援、救助</p>
           <p><strong>机构总部：</strong>湖南 益阳</p>
-          <p><strong>联系方式：</strong>13574739204</p> -->
+          <p><strong>联系方式：</strong>13574739204</p>
+
+          <div class="back-qr-row">
+            <div class="back-qr">
+              <ele-qr-code
+                value="http://www.yiansos.com/"
+                :size="80"
+                level="L"
+                :margin="0"
+                :tag="tag"
+              />
+              <p class="qr-text">益安官网</p>
+            </div>
+            <div class="back-qr">
+              <!-- 从第一张移动过来的证书二维码（替换公众号） -->
+              <ele-qr-code
+                :value="text"
+                :size="80"
+                level="L"
+                :margin="0"
+                :tag="tag"
+              />
+              <p class="qr-text">个人信息</p>
+            </div>
+          </div>
+        </div>
 
         <!-- 第二张不显示二维码（已移至第三张） -->
-        <!-- <div class="second-footer">
+        <div class="second-footer">
           <p>湖南益安应急救援服务有限公司监制</p>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -138,6 +138,10 @@
     userInfo: {
       type: Object,
       default: () => ({})
+    },
+    text: {
+      type: String,
+      default: ''
     },
     tag: {
       type: String,
@@ -155,11 +159,11 @@
   });
 
   const pageClass = computed(() => {
-    return null;
-  });
-
-  const text = computed(() => {
-    return `${location.origin}/qrcode/index.html?id=${props.userInfo.userId}`;
+    return {
+      'front-page': props.type === 'front',
+      'back-page': props.type === 'back',
+      'print-page': props.isPrint
+    };
   });
 
   /** 格式化日期 */
@@ -325,20 +329,41 @@
   }
 
   .back-page {
+    .back-header {
+      text-align: center;
+      margin-bottom: 10px;
+
+      h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #000;
+      }
+    }
+
     .back-content {
       flex: 1;
       font-size: 10px;
-      background-image: url('@/assets/guohui.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
 
       p {
         margin: 4px 0;
+      }
+
+      .back-qr-row {
+        display: flex;
+        justify-content: center;
+        margin-top: 6px;
+
+        .back-qr {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin: 0 6px;
+
+          .qr-text {
+            margin-top: 4px;
+            font-size: 9px;
+          }
+        }
       }
     }
 
@@ -400,13 +425,10 @@
     justify-content: center;
     flex-direction: column;
     text-align: center;
-    header {
-      margin-top: 10px;
-    }
 
     .first-photo {
-      width: 34mm;
-      height: 34mm;
+      width: 36mm;
+      height: 45mm;
       margin-bottom: 10px;
       // transform: translateY(-3mm); /* 头像上移 */
 
@@ -421,24 +443,6 @@
         height: 100%;
         line-height: 36mm;
         font-size: 12px;
-      }
-    }
-
-    .back-qr-row {
-      display: flex;
-      justify-content: center;
-      margin-top: 6px;
-
-      .back-qr {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0 6px;
-
-        .qr-text {
-          margin-top: 4px;
-          font-size: 9px;
-        }
       }
     }
 

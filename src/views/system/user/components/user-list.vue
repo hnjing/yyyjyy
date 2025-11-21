@@ -33,6 +33,15 @@
         删除
       </el-button>
       <el-button
+        type="success"
+        class="ele-btn-icon hidden-sm-and-down"
+        :icon="DeleteOutlined"
+        v-permission="'system:user:print'"
+        @click="printBatch()"
+      >
+        批量打印
+      </el-button>
+      <el-button
         class="ele-btn-icon"
         :icon="UploadOutlined"
         v-permission="'system:user:import'"
@@ -319,7 +328,17 @@
 
   /** 打印证书 */
   const openPrint = (row) => {
-    current.value = row ?? null;
+    current.value = [row] ?? [];
+    showPrint.value = true;
+  };
+
+  // 批量打印
+  const printBatch = (row) => {
+    current.value = row == null ? selections.value : [];
+    if (!current.value.length) {
+      EleMessage.error({ message: '请至少选择一条数据', plain: true });
+      return;
+    }
     showPrint.value = true;
   };
 

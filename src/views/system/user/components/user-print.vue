@@ -3,6 +3,7 @@
     <ele-modal
       form
       :width="780"
+      :bodyStyle="{ maxHeight: '700px', overflow: 'auto' }"
       title="证书打印"
       v-model="visible"
       :move-out="moveOut"
@@ -15,23 +16,16 @@
       :z-index="2001"
       @closed="cancelDialog"
     >
-      <div class="preview-container">
-        <user-certificate
-          :user-info="userInfo"
-          :text="text"
-          :tag="tag"
-          type="front"
-        />
-        <user-certificate
-          :user-info="userInfo"
-          :text="text"
-          :tag="tag"
-          type="back"
-        />
+      <div
+        class="preview-container"
+        v-for="item in printList"
+        :key="item.userId"
+      >
+        <user-certificate :user-info="item" :tag="tag" />
       </div>
 
       <template #footer>
-        <div class="flexSpace">
+        <div>
           <div>
             <el-button @click="cancelDialog">关闭</el-button>
             <el-button type="primary" @click="save"> 确定打印 </el-button>
@@ -42,33 +36,17 @@
 
     <ele-printer
       v-model="printing"
-      margin="0mm 12mm 10mm 12mm"
-      :header-style="{
-        padding: '26px 0 2px 0',
-        fontSize: '13px',
-        borderBottom: '1px solid #666',
-        marginBottom: '26px'
-      }"
-      :body-style="{ fontSize: '14px', lineHeight: 2.5 }"
+      margin="12mm"
       target="_iframe"
       :static="false"
       @done="handlePrintDone"
     >
-      <div class="print-container">
-        <user-certificate
-          :user-info="userInfo"
-          :text="text"
-          :tag="tag"
-          type="front"
-          :is-print="true"
-        />
-        <user-certificate
-          :user-info="userInfo"
-          :text="text"
-          :tag="tag"
-          type="back"
-          :is-print="true"
-        />
+      <div
+        class="preview-container"
+        v-for="item in printList"
+        :key="item.userId"
+      >
+        <user-certificate :user-info="item" :tag="tag" />
       </div>
     </ele-printer>
   </div>
@@ -77,23 +55,23 @@
 <script setup>
   import { ref, watch, nextTick } from 'vue';
   import { EleMessage } from 'ele-admin-plus';
-  import { getQrCodeInfo } from '@/api/workplace';
+  // import { getQrCodeInfo } from '@/api/workplace';
   import UserCertificate from './user-certificate.vue';
 
   const visible = defineModel({ type: Boolean, default: false });
   const props = defineProps({
     /** 编辑数据 */
     data: {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
     }
   });
 
   const userInfo = ref({});
+  const printList = ref([]);
 
   /** 渲染方式 */
   const tag = ref('img');
-  const text = ref(`${location.origin}/extension/qr-code`);
 
   const moveOut = ref(false);
   const modalResizable = ref(true);
@@ -129,18 +107,24 @@
     () => props.data,
     async (val) => {
       if (val) {
-        const res = await getQrCodeInfo({ userId: val.userId });
-        userInfo.value = res.sysUser;
-        text.value = location.origin + '/qrcode/index.html?id=' + val.userId;
+        printList.value = val;
+        // const res = await getQrCodeInfo({ userId: val.userId });
+        // userInfo.value = res.sysUser;
+        // text.value = location.origin + '/qrcode/index.html?id=' + val.userId;
       }
     }
   );
 </script>
 
 <style lang="scss" scoped>
+  :print-container {
+    max-height: 500px;
+    overflow: auto;
+  }
   .preview-container {
     display: flex;
     gap: 20px;
+    margin-bottom: 20px;
     justify-content: center;
     flex-wrap: wrap;
   }
@@ -148,6 +132,10 @@
   .print-container {
     display: flex;
     flex-wrap: wrap;
+    page-break-after: auto;
+    /* 打印时保持实际卡片尺寸 */
+    width: 54mm;
+    height: 86mm;
   }
 
   .flexSpace {
