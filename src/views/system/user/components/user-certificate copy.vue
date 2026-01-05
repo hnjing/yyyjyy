@@ -47,13 +47,85 @@
         </div>
       </div>
     </div>
-    <!-- 第三张：反面公司信息 + 二维码 -->
-    <div class="certificate-page back-page" :class="pageClass">
-      <div class="certificate-content back-content">
-        <div class="header">
-          <h2>中华人民共和国</h2>
-          <p>The People's Republic of China</p>
+  </div>
+
+  <!-- 第二张：详细信息，但不显示头像 -->
+  <!-- <div class="certificate-page" :class="pageClass">
+    <div class="certificate-content second-card">
+      <div class="header">
+        <h2>益安应急救援证</h2>
+        <p>Yi An Emergency Rescue</p>
+      </div>
+
+      <div class="info-grid no-photo">
+        <div class="info-item">
+          <span class="label">姓名:</span>
+          <span class="value">{{ userInfo.nickName }}</span>
         </div>
+        <div class="info-item">
+          <span class="label">性别:</span>
+          <span class="value">{{ userInfo.sex }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">血型:</span>
+          <span class="value">{{ userInfo.blood }}</span>
+        </div>
+        <div class="info-item idcard">
+          <span class="label">身份证号:</span>
+          <span class="value idcard-value">{{ userInfo.idcard }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">联系电话:</span>
+          <span class="value">{{ userInfo.phonenumber }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">紧急联系人:</span>
+          <span class="value">{{ userInfo.contactpeople }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">紧急电话:</span>
+          <span class="value">{{ userInfo.contactmobile }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">所属部门:</span>
+          <span class="value">{{ userInfo.dept?.deptName || '未知' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">职务:</span>
+          <span class="value">{{ userInfo.postName || '队员' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">有效期限:</span>
+          <span class="value">{{ validPeriod }}</span>
+        </div>
+      </div>
+
+      <div class="second-footer">
+        <p>湖南益安应急救援服务有限公司监制</p>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- 第三张：反面公司信息 + 二维码 -->
+  <div class="certificate-page back-page" :class="pageClass">
+    <div class="certificate-content">
+      <div class="header">
+        <h2>中华人民共和国</h2>
+        <p>The People's Republic of China</p>
+      </div>
+
+      <div class="back-content">
+        <!-- <p><strong>中文名称：</strong>益安应急救援服务有限公司</p>
+          <p><strong>英文简称：</strong>YASOS</p>
+          <p><strong>所在国家：</strong>中国</p>
+          <p><strong>主要职责：</strong>人道救援、救助</p>
+          <p><strong>机构总部：</strong>湖南 益阳</p>
+          <p><strong>联系方式：</strong>13574739204</p> -->
+
+        <!-- 第二张不显示二维码（已移至第三张） -->
+        <!-- <div class="second-footer">
+          <p>湖南益安应急救援服务有限公司监制</p>
+        </div> -->
       </div>
     </div>
   </div>
@@ -91,19 +163,19 @@
   });
 
   /** 格式化日期 */
-  // const formatDate = (dateString) => {
-  //   if (!dateString) return '';
-  //   const date = new Date(dateString);
-  //   return `${date.getFullYear()}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getDate().toString().padStart(2, '0')}`;
-  // };
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return `${date.getFullYear()}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getDate().toString().padStart(2, '0')}`;
+  };
 
-  // /** 有效期限：当前日期 至 三年后 */
-  // const validPeriod = computed(() => {
-  //   const now = new Date();
-  //   const later = new Date(now.getTime());
-  //   later.setFullYear(now.getFullYear() + 3);
-  //   return `${formatDate(now)}-${formatDate(later)}`;
-  // });
+  /** 有效期限：当前日期 至 三年后 */
+  const validPeriod = computed(() => {
+    const now = new Date();
+    const later = new Date(now.getTime());
+    later.setFullYear(now.getFullYear() + 3);
+    return `${formatDate(now)}-${formatDate(later)}`;
+  });
 </script>
 
 <style lang="scss" scoped>
@@ -133,6 +205,7 @@
     &.print-page {
       box-shadow: none;
       border: none;
+      margin-bottom: 6mm;
       // page-break-after: always;
       // /* 打印时保持实际卡片尺寸 */
       // width: 54mm;
@@ -459,28 +532,7 @@
 
   /* 打印时保留背景色和图片 */
   @media print {
-    /* 使用 A5 纵向纸张（打印设置选择 A5） */
-    @page {
-      size: A5 portrait;
-    }
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      height: auto !important;
-    }
-    .certificate-collection {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10mm; /* 可根据需要微调 */
-      width: 148mm;
-      height: 210mm;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      // page-break-after: always;
+    .certificate-page {
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
       box-shadow: none;

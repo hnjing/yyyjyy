@@ -70,10 +70,10 @@
         <el-link
           type="primary"
           underline="never"
-          v-permission="'system:user:edit'"
-          @click="openCode(row)"
+          v-permission="'system:user:print'"
+          @click="openPrint(row)"
         >
-          生成二维码
+          证书打印
         </el-link>
         <el-divider direction="vertical" v-permission="'system:user:edit'" />
         <el-link
@@ -287,8 +287,8 @@
     if (hasPermission('system:user:edit')) {
       items.push({ title: '分配角色', command: 'role' });
     }
-    if (hasPermission('system:user:print')) {
-      items.push({ title: '打印证书', command: 'print' });
+    if (hasPermission('system:user:edit')) {
+      items.push({ title: '生成二维码', command: 'qrcode' });
     }
     return items;
   });
@@ -408,8 +408,8 @@
     } else if (key === 'role') {
       current.value = row ?? null;
       showRole.value = true;
-    } else if (key === 'print') {
-      openPrint(row);
+    } else if (key === 'qrcode') {
+      openCode(row);
     }
   };
 
