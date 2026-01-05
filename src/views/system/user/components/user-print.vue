@@ -137,15 +137,6 @@
   //   page-break-after: auto;
   // }
 
-  .print-container {
-    display: flex;
-    flex-wrap: wrap;
-    page-break-after: auto;
-    /* 打印时保持实际卡片尺寸 */
-    width: 54mm;
-    height: 86mm;
-  }
-
   .flexSpace {
     display: flex;
     justify-content: space-between;
