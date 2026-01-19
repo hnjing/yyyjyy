@@ -17,7 +17,7 @@
       @closed="cancelDialog"
     >
       <div
-        class="preview-container show-container"
+        class="preview-container"
         v-for="item in printList"
         :key="item.userId"
       >
@@ -123,19 +123,15 @@
   }
   .preview-container {
     display: flex;
+    padding-top: 8px;
     justify-content: center;
     flex-wrap: wrap;
     // page-break-after: always;
   }
 
-  .preview-container.show-container {
-    gap: 20px;
-    margin-bottom: 20px;
+  .preview-container:nth-child(3n) {
+    page-break-after: always;
   }
-
-  // .preview-container:last-child {
-  //   page-break-after: auto;
-  // }
 
   .flexSpace {
     display: flex;

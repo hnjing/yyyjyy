@@ -1,60 +1,63 @@
 <template>
-  <login-layout>
-    <QuickLogin
-      :show-quick="showQuick"
-      :go-home="goHome"
-      :client-id="clientId"
-    />
-    <div class="login-body" v-if="tabActive == 1 && !resetPassword">
-      <AccountLogin
-        ref="accountLoginRef"
-        :clean-page-tabs="cleanPageTabs"
+  <div>
+    <!-- 手机端显示公司简介 -->
+    <MobileCompanyIntro v-if="mobileDevice" />
+    <login-layout v-else>
+      <QuickLogin
+        :show-quick="showQuick"
         :go-home="goHome"
         :client-id="clientId"
-        @switch-tab="tabActive = $event"
-        @reset-password="resetPassword = true"
       />
-    </div>
-    <div class="login-body" v-else-if="tabActive == 1 && resetPassword">
-      <ResetPassword
-        @switch-tab="tabActive = $event"
-        @back-to-login="resetPassword = false"
-      />
-    </div>
-    <!-- <div class="login-body" v-else-if="tabActive == 2">
-      <UkeyLogin
-        ref="ukeyLoginRef"
-        :clean-page-tabs="cleanPageTabs"
-        :go-home="goHome"
-        :client-id="clientId"
-        @switch-tab="switchToAccountLogin"
-      />
-    </div> -->
-    <!-- <div class="login-body" v-else-if="tabActive == 3">
-      <saomaLogin
-        ref="saomaLoginRef"
-        :clean-page-tabs="cleanPageTabs"
-        :go-home="goHome"
-        :client-id="clientId"
-        @switch-tab="tabActive = $event"
-      />
-    </div> -->
-  </login-layout>
+      <div class="login-body" v-if="tabActive == 1 && !resetPassword">
+        <AccountLogin
+          ref="accountLoginRef"
+          :clean-page-tabs="cleanPageTabs"
+          :go-home="goHome"
+          :client-id="clientId"
+          @switch-tab="tabActive = $event"
+          @reset-password="resetPassword = true"
+        />
+      </div>
+      <div class="login-body" v-else-if="tabActive == 1 && resetPassword">
+        <ResetPassword
+          @switch-tab="tabActive = $event"
+          @back-to-login="resetPassword = false"
+        />
+      </div>
+      <!-- <div class="login-body" v-else-if="tabActive == 2">
+        <UkeyLogin
+          ref="ukeyLoginRef"
+          :clean-page-tabs="cleanPageTabs"
+          :go-home="goHome"
+          :client-id="clientId"
+          @switch-tab="switchToAccountLogin"
+        />
+      </div> -->
+      <!-- <div class="login-body" v-else-if="tabActive == 3">
+        <saomaLogin
+          ref="saomaLoginRef"
+          :clean-page-tabs="cleanPageTabs"
+          :go-home="goHome"
+          :client-id="clientId"
+          @switch-tab="tabActive = $event"
+        />
+      </div> -->
+    </login-layout>
+  </div>
 </template>
 
 <script setup>
   import { ref, onMounted, watch } from 'vue';
   import { useRouter } from 'vue-router';
   import { getToken } from '@/utils/token-util';
-  import { systemConfig } from '@/api/login';
   import { usePageTab } from '@/utils/use-page-tab';
   import { CLIENT_ID } from '@/config/setting';
   import LoginLayout from './components/LoginLayout.vue';
+  import MobileCompanyIntro from '@/components/mobile/MobileCompanyIntro.vue';
   import QuickLogin from './components/QuickLogin.vue';
   import AccountLogin from './components/AccountLogin.vue';
-  import saomaLogin from './components/saomaLogin.vue';
   import ResetPassword from './components/ResetPassword.vue';
-  import UkeyLogin from './components/UkeyLogin.vue';
+  import { useMobileDevice } from '@/utils/use-mobile';
 
   import './styles/index.scss';
 
@@ -69,6 +72,9 @@
   const tabActive = ref(1);
   const resetPassword = ref(false);
 
+  // 是否为手机端（用于显示公司简介）
+  const { mobileDevice } = useMobileDevice();
+
   // 账号登录组件实例
   const accountLoginRef = ref(null);
   // UKey登录组件实例
@@ -78,12 +84,6 @@
   const goHome = () => {
     const { query } = currentRoute.value;
     goHomeRoute(query.from);
-  };
-
-  // 切换到账号登录
-  const switchToAccountLogin = (tab) => {
-    tabActive.value = tab;
-    resetPassword.value = false;
   };
 
   // 监听tabActive变化，当切换到UKey登录时自动初始化

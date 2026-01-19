@@ -132,7 +132,7 @@
     /* 每张卡左右间距 */
     margin: 0 3mm;
     flex: 0 0 auto;
-    page-break-after: always;
+    // page-break-after: always;
 
     &.print-page {
       box-shadow: none;
@@ -458,54 +458,6 @@
       text-align: center;
       font-size: 9px;
       color: #666;
-    }
-  }
-
-  /* 打印时保留背景色和图片 */
-  @media print {
-    /* 使用自定义纸张 102mm x 162mm，纵向 */
-    @page {
-      size: 102mm 162mm portrait;
-      margin: 0mm; /* 纸张边距由样式内控制，打印机边距需在打印对话框确认 */
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      height: auto !important;
-      background: none;
-    }
-
-    /* 让每个 certificate-page 占满一张纸并单页打印 */
-    .certificate-collection {
-      box-sizing: border-box;
-      width: 102mm;
-      height: 162mm;
-      margin: 0;
-      padding: 0;
-      // display: block; /* 每个 page 单独占一页 */
-      overflow: visible;
-      position: flex;
-      align-items: center;
-      justify-content: flex-start;
-      transform: rotate(90deg);
-    }
-
-    .certificate-page {
-      // transform: rotate(90deg);
-      // position: flex;
-      // box-sizing: border-box;
-      // margin: 0;
-      // padding: 0;
-      // display: flex;
-      // flex-direction: column;
-      // justify-content: space-between;
-      // align-items: center;
-      // background: #fff;
-      // background-size: cover;
-      // background-position: center;
-      // background-repeat: no-repeat;
     }
   }
 
