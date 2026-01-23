@@ -179,7 +179,11 @@
         width: 48,
         align: 'center' /* ,
         fixed: 'left' */,
-        showOverflowTooltip: false
+        reserveSelection: true,
+        showOverflowTooltip: false,
+        selectable: (row) => {
+          return !!row.headurl;
+        }
       },
       {
         type: 'index',
