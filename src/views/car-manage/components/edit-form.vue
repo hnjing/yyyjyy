@@ -143,6 +143,16 @@
       },
       colProps: { span: 8 },
       required: true
+    },
+    {
+      label: '驾驶证',
+      prop: 'remark5',
+      type: 'imageUpload',
+      props: {
+        limit: 1
+      },
+      colProps: { span: 12 },
+      required: true
     }
   ]);
 
