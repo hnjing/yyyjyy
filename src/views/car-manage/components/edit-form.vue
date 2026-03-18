@@ -68,7 +68,11 @@
     mobile: '',
     carPic: '',
     bindTime: '',
-    remark1: ''
+    remark1: '',
+    remark2: '',
+    remark3: '',
+    remark4: '',
+    remark5: '',
   });
 
   /** 表单项 */
