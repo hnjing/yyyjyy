@@ -12,7 +12,7 @@
       <ele-split-panel
         ref="splitRef"
         flex-table
-        size="256px"
+        size="226px"
         allow-collapse
         :custom-style="{ borderWidth: '0 1px 0 0', padding: '16px 0' }"
         :body-style="{ padding: '16px 16px 0 0', overflow: 'hidden' }"

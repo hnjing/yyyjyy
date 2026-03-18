@@ -39,7 +39,16 @@
         v-permission="'system:user:print'"
         @click="printBatch()"
       >
-        批量打印
+        批量打印证书
+      </el-button>
+      <el-button
+        type="warning"
+        class="ele-btn-icon hidden-sm-and-down"
+        :icon="DeleteOutlined"
+        v-permission="'system:user:print'"
+        @click="printPhotoBatch()"
+      >
+        批量打印照片
       </el-button>
       <el-button
         class="ele-btn-icon"
@@ -74,6 +83,15 @@
           @click="openPrint(row)"
         >
           证书打印
+        </el-link>
+        <el-divider direction="vertical" v-permission="'system:user:edit'" />
+        <el-link
+          type="success"
+          underline="never"
+          v-permission="'system:user:print'"
+          @click="openPhotoPrint(row)"
+        >
+          照片打印
         </el-link>
         <el-divider direction="vertical" v-permission="'system:user:edit'" />
         <el-link
@@ -125,6 +143,8 @@
   <user-code v-model="showCode" :data="current" />
   <!-- 打印证书 -->
   <user-print v-model="showPrint" :data="current" />
+  <!-- 打印照片 -->
+  <user-photo-print v-model="showPhotoPrint" :data="current" />
 </template>
 
 <script setup>
@@ -146,6 +166,7 @@
   import UserRole from './user-role.vue';
   import UserCode from './user-code.vue';
   import UserPrint from './user-print.vue';
+  import UserPhotoPrint from './user-photo-print.vue';
   import {
     pageUsers,
     removeUsers,
@@ -252,7 +273,7 @@
       {
         columnKey: 'action',
         label: '操作',
-        width: 280,
+        width: 340,
         align: 'center',
         slot: 'action',
         fixed: 'right',
@@ -281,6 +302,8 @@
   const showCode = ref(false);
 
   const showPrint = ref(false);
+
+  const showPhotoPrint = ref(false);
 
   /** 操作列更多下拉菜单 */
   const moreItems = computed(() => {
@@ -336,7 +359,13 @@
     showPrint.value = true;
   };
 
-  // 批量打印
+  /** 打印照片 */
+  const openPhotoPrint = (row) => {
+    current.value = [row] ?? [];
+    showPhotoPrint.value = true;
+  };
+
+  // 批量打印证书
   const printBatch = (row) => {
     current.value = row == null ? selections.value : [];
     if (!current.value.length) {
@@ -344,6 +373,16 @@
       return;
     }
     showPrint.value = true;
+  };
+
+  // 批量打印照片
+  const printPhotoBatch = (row) => {
+    current.value = row == null ? selections.value : [];
+    if (!current.value.length) {
+      EleMessage.error({ message: '请至少选择一条数据', plain: true });
+      return;
+    }
+    showPhotoPrint.value = true;
   };
 
   /** 批量删除 */
